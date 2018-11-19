@@ -1,0 +1,104 @@
+<head>
+  <style>
+      textarea {
+        width: 194px;
+
+height: 301px;
+      }
+    .grid {
+      width: 312px;
+      margin: 10px;
+      display: inline-flex;
+      border: 2px solid black;
+      flex-wrap: wrap;
+    }
+    .space {
+      width: 100px;
+      border: 2px solid black;
+      height: 100px;
+    }
+
+    .on {
+      background: black;
+      border: 2px solid white;
+    }
+  </style>
+  <script type="text/javascript">
+    function update() {
+      try {
+          output.value = input.value.replace(/\n/g,"|");
+        let data = input.value.split("\n\n").map(x => x.split("\n"));
+        [...document.getElementsByClassName("on")].forEach(d =>
+          d.classList.remove("on")
+        );
+        for (let i = 0; i < 3; i++) {
+          for (let j = 0; j < 3; j++) {
+            for (let k = 0; k < 3; k++) {
+              if (data[i][j].charAt(k) == "1") {
+                dom[0][j][k].classList.add("on");
+              }
+              if (data[j][k].charAt(i) == "1") {
+                dom[1][j][k].classList.add("on");
+              }
+              if (data[k][i].charAt(j) == "1") {
+                dom[2][j][k].classList.add("on");
+              }
+            }
+          }
+        }
+      } catch (e) {}
+    }
+
+    let digits = [0, 1, 2];
+    let dom = [];
+    let input, output;
+    document.addEventListener("DOMContentLoaded", function(event) {
+      input = document.getElementById("inp");
+      output = document.getElementById("out");
+      dom = digits.map(x =>
+        digits.map(y =>
+          digits.map(z => document.getElementById(x + "-" + y + "-" + z))
+        )
+      );
+      input.oninput = update;
+    });
+  </script>
+</head>
+<body>
+  <textarea type="text" id="inp"></textarea>
+  <input type="text" id="out" />
+  <button onclick="update()">Refresh</button>
+  <div class="grid">
+      <div class="space" id="0-0-0"></div>
+    <div class="space" id="0-0-1"></div>
+    <div class="space" id="0-0-2"></div>
+    <div class="space" id="0-1-0"></div>
+    <div class="space" id="0-1-1"></div>
+    <div class="space" id="0-1-2"></div>
+    <div class="space" id="0-2-0"></div>
+    <div class="space" id="0-2-1"></div>
+    <div class="space" id="0-2-2"></div>
+  </div>
+  <div class="grid">
+      <div class="space" id="1-0-0"></div>
+      <div class="space" id="1-0-1"></div>
+    <div class="space" id="1-0-2"></div>
+    <div class="space" id="1-1-0"></div>
+    <div class="space" id="1-1-1"></div>
+    <div class="space" id="1-1-2"></div>
+    <div class="space" id="1-2-0"></div>
+    <div class="space" id="1-2-1"></div>
+    <div class="space" id="1-2-2"></div>
+  </div>
+  <div class="grid">
+      <div class="space" id="2-0-0"></div>
+      <div class="space" id="2-0-1"></div>
+    <div class="space" id="2-0-2"></div>
+    <div class="space" id="2-1-0"></div>
+    <div class="space" id="2-1-1"></div>
+    <div class="space" id="2-1-2"></div>
+    <div class="space" id="2-2-0"></div>
+    <div class="space" id="2-2-1"></div>
+    <div class="space" id="2-2-2"></div>
+  </div>
+</body>
