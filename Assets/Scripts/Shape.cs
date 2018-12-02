@@ -226,8 +226,10 @@ public class Shape : MonoBehaviour
 	float smooth = 5.0f;
 	void Update ()
 	{
+		if (!Input.GetMouseButton(1)) {
 
 		transform.rotation = Quaternion.Slerp (transform.rotation, quaternion, Time.deltaTime * smooth);
+		}
 	}
 
 }

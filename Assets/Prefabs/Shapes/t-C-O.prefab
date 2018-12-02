@@ -35,6 +35,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4000013445070726}
   - component: {fileID: 114000012074316468}
+  - component: {fileID: 114065114558748306}
   m_Layer: 0
   m_Name: Shape
   m_TagString: Untagged
@@ -86,3 +87,15 @@ MonoBehaviour:
   materialRed: {fileID: 2100000, guid: 46bddf384747617469e9dc7f04b3baed, type: 2}
   materialGreen: {fileID: 2100000, guid: e47466427a95dd645a5e66092b7bd907, type: 2}
   materialWhite: {fileID: 2100000, guid: 0e62f06c731aee74dbb5860432f01543, type: 2}
+--- !u!114 &114065114558748306
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012630242390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc3b9a189b91329428322c45223480f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sensitivity: 0.4

@@ -17,9 +17,10 @@ public class Grid : MonoBehaviour
 	private Dictionary<Point, Shape> occupiedTiles = new Dictionary<Point, Shape> ();
 	private Color[] colors = { Color.white, new Color (0.75f, 0.75f, 0.75f), Color.red };
 	public Point currentHover = null;
-	private int[, ] grid = new int[, ]
-	{ { 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 1, 1, 1, 0, 0, 0 }, { 0, 0, 1, 0, 1, 0, 0, 0 }, { 0, 0, 1, 1, 1, 0, 0, 0 }, { 0, 0, 0, 1, 0, 0, 0, 0 }, { 0, 0, 0, 1, 1, 0, 0, 0 }, { 0, 0, 0, 1, 0, 0, 0, 0 }, { 0, 0, 0, 1, 1, 0, 0, 0 }
-	};
+
+	public List<GridPuzzle> puzzles = new List<GridPuzzle> ();
+	private int puzzleIndex = 0;
+	private int[, ] grid;
 
 	private HashSet<Point> slots = new HashSet<Point> ();
 	private GameObject[, ] buttons;
@@ -29,6 +30,7 @@ public class Grid : MonoBehaviour
 	private int colCount;
 	void Start ()
 	{
+		grid = puzzles[puzzleIndex].Grid;
 		rowCount = grid.GetLength (0);
 		colCount = grid.GetLength (1);
 		panel = GetComponent<RectTransform> ();
@@ -70,6 +72,10 @@ public class Grid : MonoBehaviour
 			spacing += 2.75f;
 		}
 		RefreshGrid ();
+	}
+	public void RightClickDrag (Vector3 drag)
+	{
+
 	}
 	void ButtonHover (int row, int col)
 	{
@@ -207,11 +213,29 @@ public class Grid : MonoBehaviour
 				}
 			}
 	}
+	public void CyclePuzzle ()
+	{
+		puzzleIndex = (puzzleIndex + 1) % puzzles.Count;
+		grid = puzzles[puzzleIndex].Grid;
+		slots.Clear ();
+		for (int row = 0; row < rowCount; row++)
+		{
+			for (int col = 0; col < colCount; col++)
+			{
 
+				if (grid[row, col] == 1)
+				{
+					slots.Add (Point.GridCoord (row, col));
+				}
+			}
+		}
+		RefreshGrid ();
+		CheckIsComplete ();
+	}
 	// Update is called once per frame
 	void Update ()
 	{
-		if (currentShape != null)
+		if (currentShape != null && !Input.GetMouseButton (1))
 		{
 			Vector3 pos = Input.mousePosition;
 			pos.z = currentShape.gameObject.transform.position.z - Camera.main.transform.position.z;
