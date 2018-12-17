@@ -10,7 +10,6 @@ public class Grid : MonoBehaviour
 	public GameObject buttonPrefab;
 	public RectTransform panel;
 
-	public List<GameObject> inventory;
 	public Shape currentShape;
 	private List<Shape> placedShapes = new List<Shape> ();
 
@@ -28,12 +27,49 @@ public class Grid : MonoBehaviour
 
 	private int rowCount;
 	private int colCount;
+	public bool isActive = false;
+	public List<ITerminalListener> terminalListeners;
+	private bool wasIncomplete = true;
+	public void AddTerminalListener (ITerminalListener newListener)
+	{
+		if (terminalListeners == null)
+		{
+			terminalListeners = new List<ITerminalListener> ();
+		}
+		terminalListeners.Add (newListener);
+	}
+	public void OnActivated ()
+	{
+		isActive = true;
+		for (int row = 0; row < rowCount; row++)
+		{
+			for (int col = 0; col < colCount; col++)
+			{
+				buttons[row, col].SetActive (true);
+			}
+		}
+		RefreshGrid ();
+	}
+	public void OnDeactivated ()
+	{
+		isActive = false;
+		for (int row = 0; row < rowCount; row++)
+		{
+			for (int col = 0; col < colCount; col++)
+			{
+				buttons[row, col].SetActive (false);
+			}
+		}
+	}
 	void Start ()
 	{
+		if (terminalListeners == null)
+		{
+			terminalListeners = new List<ITerminalListener> ();
+		}
 		grid = puzzles[puzzleIndex].Grid;
 		rowCount = grid.GetLength (0);
 		colCount = grid.GetLength (1);
-		panel = GetComponent<RectTransform> ();
 		buttons = new GameObject[rowCount, colCount];
 		// CreateNewShape ();
 		for (int row = 0; row < rowCount; row++)
@@ -55,22 +91,14 @@ public class Grid : MonoBehaviour
 				eventExit.callback.AddListener ((data) => ButtonHoverExit ());
 				eventTrigger.triggers.Add (eventExit);
 				buttons[row, col] = buttonGameObject;
-
+				buttonGameObject.SetActive (false);
 				if (grid[row, col] == 1)
 				{
 					slots.Add (Point.GridCoord (row, col));
 				}
 			}
 		}
-		float spacing = -1.75f;
-		foreach (GameObject inventoryShapeGO in inventory)
-		{
 
-			GameObject inventoryShapeInstance = Instantiate (inventoryShapeGO.gameObject);
-			inventoryShapeInstance.transform.position = new Vector3 (5.88f, spacing, 0f);
-			// inventoryShapeInstance.GetComponentInChildren<Shape>().Scale(new Vector3(0.75f,0.75f,0.75f));
-			spacing += 2.75f;
-		}
 		RefreshGrid ();
 	}
 	public void RightClickDrag (Vector3 drag)
@@ -79,6 +107,10 @@ public class Grid : MonoBehaviour
 	}
 	void ButtonHover (int row, int col)
 	{
+		if (!isActive)
+		{
+			return;
+		}
 		currentHover = Point.GridCoord (Mathf.Clamp (row, 1, 6), Mathf.Clamp (col, 1, 6));
 
 		RefreshGrid ();
@@ -87,10 +119,15 @@ public class Grid : MonoBehaviour
 	void ButtonHoverExit ()
 	{
 		currentHover = null;
+		currentShape?.ClearColorVoxels ();
 		RefreshGrid ();
 	}
 	public void RefreshGrid ()
 	{
+		if (!isActive)
+		{
+			return;
+		}
 		for (int row = 0; row < rowCount; row++)
 		{
 			for (int col = 0; col < colCount; col++)
@@ -151,15 +188,35 @@ public class Grid : MonoBehaviour
 		}
 
 	}
-	void CheckIsComplete ()
+	bool CheckIsComplete ()
 	{
 		if (occupiedTiles.Count == slots.Count && slots.All ((p) => occupiedTiles.ContainsKey (p)))
 		{
-			Debug.Log ("You win!");
+			if (wasIncomplete)
+			{
+				wasIncomplete = false;
+				foreach (ITerminalListener listener in terminalListeners)
+				{
+					listener.OnComplete ();
+				}
+				Debug.Log ("You win!");
+
+			}
+			return true;
 		}
+		if (!wasIncomplete)
+		{
+			wasIncomplete = true;
+			foreach (ITerminalListener listener in terminalListeners)
+			{
+				listener.OnIncomplete ();
+			}
+		}
+		return false;
 	}
 	public void PlaceCurrentShape ()
 	{
+
 		List<Point> currentTiles = currentShape.GetTileLocations (currentHover);
 		if (currentTiles.Any (i => occupiedTiles.ContainsKey (i)))
 		{
@@ -184,6 +241,9 @@ public class Grid : MonoBehaviour
 		}
 		Shape clickedShape = occupiedTiles[currentHover];
 		clickedShape.gameObject.SetActive (true);
+		clickedShape.ClearColorVoxels ();
+		EventManager.TriggerEvent (EventManager.Event.SHAPE_REMOVED);
+
 		if (placedShapes.Contains (clickedShape))
 		{
 
@@ -192,12 +252,13 @@ public class Grid : MonoBehaviour
 				occupiedTiles.Remove (p);
 			}
 		}
-		currentShape = clickedShape;
+		CheckIsComplete ();
+		// currentShape = clickedShape;
 	}
 	public void GetClickTarget ()
 	{
 		RaycastHit hit;
-		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+		Ray ray = Camera.allCameras[1].ScreenPointToRay (Input.mousePosition);
 		if (Physics.Raycast (ray, out hit))
 			if (hit.transform != null)
 			{
@@ -235,11 +296,11 @@ public class Grid : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		if (currentShape != null && !Input.GetMouseButton (1))
+		if (isActive && currentShape != null && !Input.GetMouseButton (1))
 		{
 			Vector3 pos = Input.mousePosition;
-			pos.z = currentShape.gameObject.transform.position.z - Camera.main.transform.position.z;
-			currentShape.gameObject.transform.position = Camera.main.ScreenToWorldPoint (pos);
+			pos.z = currentShape.gameObject.transform.position.z - Camera.allCameras[1].transform.position.z;
+			currentShape.gameObject.transform.parent.position = Camera.allCameras[1].ScreenToWorldPoint (pos);
 		}
 
 	}

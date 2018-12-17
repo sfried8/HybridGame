@@ -8,22 +8,18 @@ public class Shape : MonoBehaviour
 	public GameObject voxelPrefab;
 	public string gridSource = "000|010|111||000|000|101||000|010|111";
 	public int[][][] grid;
-	// public int[][][] grid = Util.Create3DIntArrayFromString(@"  100
-	// 															000
-	// 															111
 
-	// 															000
-	// 															110
-	// 															000
-
-	// 															001
-	// 															000
-	// 															000", 3,3,3);
 	public Material materialRed;
 	public Material materialGreen;
 	public Material materialWhite;
 	public GameObject[][][] Voxels;
 	public Point location;
+
+	private bool _freezeRotation = false;
+	public bool FreezeRotation
+	{
+		get { return _freezeRotation; } set { _freezeRotation = value; }
+	}
 	public List<Point> GetTileLocations (Point _location)
 	{
 		updateRendererFace ();
@@ -69,7 +65,7 @@ public class Shape : MonoBehaviour
 	}
 	public int[][] Face ()
 	{
-		int[][] ret = Util.CreateZeroed2DIntArray(grid[0][0].Length,grid[0].Length);
+		int[][] ret = Util.CreateZeroed2DIntArray (grid[0][0].Length, grid[0].Length);
 		for (int plane = 0; plane < grid.Length; plane++)
 		{
 			for (int row = 0; row < grid[0].Length; row++)
@@ -87,8 +83,26 @@ public class Shape : MonoBehaviour
 		return ret;
 	}
 
-	private Color greenColor = new Color(0.5f,1.0f,0.5f,0.8f);
-	private Color redColor = new Color(1.0f,0.5f,0.5f,0.8f);
+	private Color clearColor = new Color (1f, 1f, 1f, 53f / 255f);
+	public void ClearColorVoxels ()
+	{
+		for (int row = 0; row < grid[0].Length; row++)
+		{
+
+			for (int col = 0; col < grid[0][0].Length; col++)
+			{
+				for (int plane = 0; plane < grid.Length; plane++)
+				{
+					if (Voxels[plane][row][col] != null)
+					{
+						Voxels[plane][row][col].GetComponent<Renderer> ().material.color = clearColor;
+					}
+				}
+			}
+		}
+	}
+	private Color greenColor = new Color (0.5f, 1.0f, 0.5f, 0.8f);
+	private Color redColor = new Color (1.0f, 0.5f, 0.5f, 0.8f);
 	public void ColorVoxels (int[][] slots)
 	{
 		// return;
@@ -104,14 +118,16 @@ public class Shape : MonoBehaviour
 				{
 					if (Voxels[plane][row][col] != null)
 					{
-						if (slots[2-row][2-col] == 1)
+						if (slots[2 - row][2 - col] == 1)
 						{
-							Voxels[plane][row][col].GetComponent<Renderer> ().material.color = greenColor;
+							// Voxels[plane][row][col].GetComponent<Renderer> ().materials.color = greenColor;
+							Voxels[plane][row][col].GetComponent<Renderer> ().materials = new Material[1] { materialGreen };
 
 						}
 						else
 						{
-							Voxels[plane][row][col].GetComponent<Renderer> ().material.color = redColor;
+							Voxels[plane][row][col].GetComponent<Renderer> ().materials = new Material[1] { materialRed };
+							// Voxels[plane][row][col].GetComponent<Renderer> ().material.color = redColor;
 
 						}
 					}
@@ -120,11 +136,11 @@ public class Shape : MonoBehaviour
 			// Console.Write (Environment.NewLine + Environment.NewLine);
 		}
 	}
-	Quaternion quaternion;
+	public Quaternion quaternion;
 	public void rotate (bool roll, bool reverse)
 	{
-		int[][][] newGrid = Util.CreateZeroed3DIntArray(grid); // grid[0].Length, grid[0][0].Length];
-		GameObject[][][] newVoxels = Util.CreateNulled3DGameObjectArray(Voxels); //, Voxels[0].Length, Voxels[0][0].Length];
+		int[][][] newGrid = Util.CreateZeroed3DIntArray (grid); // grid[0].Length, grid[0][0].Length];
+		GameObject[][][] newVoxels = Util.CreateNulled3DGameObjectArray (Voxels); //, Voxels[0].Length, Voxels[0][0].Length];
 		if (roll)
 		{
 
@@ -160,7 +176,6 @@ public class Shape : MonoBehaviour
 				for (int row = 0; row < grid[0].Length; row++)
 				{
 
-
 					for (int col = 0; col < grid[0][0].Length; col++)
 					{
 
@@ -188,8 +203,8 @@ public class Shape : MonoBehaviour
 	}
 	void Awake ()
 	{
-		grid  = Util.Create3DIntArrayFromString(gridSource, 3,3,3);
-		Voxels = Util.CreateNulled3DGameObjectArray(grid[0][0].Length, grid[0].Length, grid.Length); //, grid[0].Length, grid[0][0].Length];
+		grid = Util.Create3DIntArrayFromString (gridSource, 3, 3, 3);
+		Voxels = Util.CreateNulled3DGameObjectArray (grid[0][0].Length, grid[0].Length, grid.Length); //, grid[0].Length, grid[0][0].Length];
 		for (int plane = 0; plane < grid.Length; plane++)
 		{
 			for (int row = 0; row < grid[0].Length; row++)
@@ -200,21 +215,27 @@ public class Shape : MonoBehaviour
 					{
 						GameObject voxel = (GameObject) Instantiate (voxelPrefab);
 						voxel.transform.SetParent (gameObject.transform);
-						voxel.transform.localPosition = new Vector3 (col-1,1-row, plane - 1);
+						voxel.transform.localPosition = new Vector3 (col - 1, 1 - row, plane - 1);
 						Voxels[plane][row][col] = voxel;
-						voxel.name = string.Format("{0},{1},{2}",plane,row,col);
+						voxel.name = string.Format ("{0},{1},{2}", plane, row, col);
 					}
 				}
 			}
 		}
 		quaternion = Quaternion.identity;
+
 	}
 
-	public void Scale(Vector3 scale) {
-		foreach(GameObject[][] x in Voxels) {
-			foreach(GameObject[] y in x) {
-				foreach(GameObject z in y) {
-					if (z != null) {
+	public void Scale (Vector3 scale)
+	{
+		foreach (GameObject[][] x in Voxels)
+		{
+			foreach (GameObject[] y in x)
+			{
+				foreach (GameObject z in y)
+				{
+					if (z != null)
+					{
 						z.transform.localScale = scale;
 					}
 				}
@@ -226,9 +247,10 @@ public class Shape : MonoBehaviour
 	float smooth = 5.0f;
 	void Update ()
 	{
-		if (!Input.GetMouseButton(1)) {
+		if (!FreezeRotation)
+		{
 
-		transform.rotation = Quaternion.Slerp (transform.rotation, quaternion, Time.deltaTime * smooth);
+			transform.rotation = Quaternion.Slerp (transform.rotation, quaternion, Time.deltaTime * smooth);
 		}
 	}
 

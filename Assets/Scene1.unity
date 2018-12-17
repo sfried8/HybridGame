@@ -227,6 +227,9 @@ MonoBehaviour:
   - {fileID: 1689646392544602, guid: ace91477b5c2cb84a96bd49c72427693, type: 2}
   - {fileID: 1689646392544602, guid: ace91477b5c2cb84a96bd49c72427693, type: 2}
   currentShape: {fileID: 0}
+  puzzles:
+  - {fileID: 114541193716711308, guid: 01df9225e2903cd4eb22a657f560815c, type: 2}
+  - {fileID: 114480707704345176, guid: 48a701e21c785944c888e00d3fe70627, type: 2}
 --- !u!114 &675725438
 MonoBehaviour:
   m_ObjectHideFlags: 0

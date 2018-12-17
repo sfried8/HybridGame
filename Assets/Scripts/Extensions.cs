@@ -37,5 +37,25 @@ public static class Extensions
 		}
 		return intgrid.PrettyPrint ();
 	}
+	public static void SetLayerRecursively (this GameObject obj, int newLayer)
+	{
+
+		if (null == obj)
+		{
+			return;
+		}
+
+		obj.layer = newLayer;
+
+		foreach (Transform child in obj.transform)
+		{
+			if (null == child)
+			{
+				continue;
+			}
+			child.gameObject.SetLayerRecursively (newLayer);
+		}
+
+	}
 
 }
