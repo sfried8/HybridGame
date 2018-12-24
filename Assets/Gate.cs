@@ -17,6 +17,7 @@ public class Gate : MonoBehaviour, ITerminalListener
     public void OnComplete ()
     {
         gameObject.SetActive (false);
+        Application.LoadLevel ("Platformer1");
     }
     public void OnIncomplete ()
     {

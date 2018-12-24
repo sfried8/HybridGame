@@ -27,7 +27,7 @@ public class Inventory : MonoBehaviour
 		shapeInstances.Add (inventoryShapeInstance);
 		inventoryShapeInstance.transform.position = new Vector3 (11f, spacing, 85f);
 		inventoryShapeInstance.transform.localScale = new Vector3 (0.75f, 0.75f, 1f);
-		// inventoryShapeInstance.GetComponentInChildren<Shape>().Scale(new Vector3(0.75f,0.75f,0.75f));
+		// inventoryShapeInstance.GetComponentInChildren<Shape> ().Scale (new Vector3 (0.75f, 0.75f, 0.75f));
 		spacing += 2.95f;
 	}
 	// void InitializeGameObjects ()
@@ -50,7 +50,6 @@ public class Inventory : MonoBehaviour
 		{
 			// if (shape.activeSelf)
 			// {
-			Debug.Log ("Setting transform position to: 11, " + spacing + ", 85");
 
 			shape.transform.position = new Vector3 (11f, spacing, 85f);
 			spacing += 2.95f;
