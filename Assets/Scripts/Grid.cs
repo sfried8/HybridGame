@@ -9,7 +9,6 @@ public class Grid : MonoBehaviour
 {
 	public GameObject buttonPrefab;
 	public RectTransform panel;
-
 	public Shape currentShape;
 	private List<Shape> placedShapes = new List<Shape> ();
 
@@ -28,16 +27,8 @@ public class Grid : MonoBehaviour
 	private int rowCount;
 	private int colCount;
 	public bool isActive = false;
-	public List<ITerminalListener> terminalListeners;
 	private bool wasIncomplete = true;
-	public void AddTerminalListener (ITerminalListener newListener)
-	{
-		if (terminalListeners == null)
-		{
-			terminalListeners = new List<ITerminalListener> ();
-		}
-		terminalListeners.Add (newListener);
-	}
+
 	public void OnActivated ()
 	{
 		isActive = true;
@@ -63,10 +54,6 @@ public class Grid : MonoBehaviour
 	}
 	void Start ()
 	{
-		if (terminalListeners == null)
-		{
-			terminalListeners = new List<ITerminalListener> ();
-		}
 		grid = puzzles[puzzleIndex].Grid;
 		rowCount = grid.GetLength (0);
 		colCount = grid.GetLength (1);
@@ -195,11 +182,7 @@ public class Grid : MonoBehaviour
 			if (wasIncomplete)
 			{
 				wasIncomplete = false;
-				foreach (ITerminalListener listener in terminalListeners)
-				{
-					listener.OnComplete ();
-				}
-				Debug.Log ("You win!");
+				EventManager.TriggerEvent (EventManager.EVENT_TYPE.TERMINAL_COMPLETE,new TerminalPuzzleInfo(){terminalGrid=this});
 
 			}
 			return true;
@@ -207,10 +190,7 @@ public class Grid : MonoBehaviour
 		if (!wasIncomplete)
 		{
 			wasIncomplete = true;
-			foreach (ITerminalListener listener in terminalListeners)
-			{
-				listener.OnIncomplete ();
-			}
+			EventManager.TriggerEvent (EventManager.EVENT_TYPE.TERMINAL_INCOMPLETE,new TerminalPuzzleInfo(){terminalGrid=this});
 		}
 		return false;
 	}
@@ -242,7 +222,7 @@ public class Grid : MonoBehaviour
 		Shape clickedShape = occupiedTiles[currentHover];
 		clickedShape.gameObject.SetActive (true);
 		clickedShape.ClearColorVoxels ();
-		EventManager.TriggerEvent (EventManager.Event.SHAPE_REMOVED);
+		EventManager.TriggerEvent (EventManager.EVENT_TYPE.SHAPE_REMOVED,null);
 
 		if (placedShapes.Contains (clickedShape))
 		{

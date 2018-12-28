@@ -17,7 +17,7 @@ public class Inventory : MonoBehaviour
 
 			shapeInstances = new List<GameObject> ();
 		}
-		EventManager.StartListening (EventManager.Event.SHAPE_REMOVED, new UnityAction (RefreshSpacing));
+		EventManager.StartListening (EventManager.EVENT_TYPE.SHAPE_REMOVED, RefreshSpacing);
 	}
 	public void AddShape (GameObject shape)
 	{
@@ -43,7 +43,7 @@ public class Inventory : MonoBehaviour
 	// 		spacing += 2.95f;
 	// 	}
 	// }
-	public void RefreshSpacing ()
+	public void RefreshSpacing (EventInfo info)
 	{
 		spacing = -8.5f;
 		foreach (GameObject shape in shapeInstances)

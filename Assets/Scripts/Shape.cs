@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 [System.Serializable]
@@ -6,7 +7,8 @@ public class Shape : MonoBehaviour
 {
 
 	public GameObject voxelPrefab;
-	public string gridSource = "000|010|111||000|000|101||000|010|111";
+	[TextArea (11, 11)]
+	public string gridSource;
 	public int[][][] grid;
 
 	public Material materialRed;

@@ -38,8 +38,8 @@ public class PlatformController : MonoBehaviour
     {
         spawnPoint = transform.position;
         rb2d = GetComponent<Rigidbody2D> ();
-        EventManager.StartListening (EventManager.Event.TERMINAL_ACTIVATED, new UnityAction (() => controlsActive = false));
-        EventManager.StartListening (EventManager.Event.TERMINAL_DEACTIVATED, new UnityAction (() => controlsActive = true));
+        EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_ACTIVATED, (_) => controlsActive = false);
+        EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_DEACTIVATED, (_) => controlsActive = true);
     }
 
     // Update is called once per frame

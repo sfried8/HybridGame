@@ -19,9 +19,9 @@ public class Coin : MonoBehaviour
 		SineWaveMovement swm = shapeInstance.AddComponent<SineWaveMovement> ();
 		swm.Magnitude = 0.09f;
 		swm.VerticalSpeed = 2;
-		swm.RotationVelocityX = Random.Range (35, 50);
-		swm.RotationVelocityY = Random.Range (35, 50);
-		swm.RotationVelocityZ = Random.Range (35, 50);
+		swm.RotationVelocityX = Random.Range (-35, 35);
+		swm.RotationVelocityY = Random.Range (-35, 35);
+		swm.RotationVelocityZ = Random.Range (-35, 35);
 	}
 
 	// Update is called once per frame
@@ -36,7 +36,7 @@ public class Coin : MonoBehaviour
 		{
 			Destroy (gameObject);
 			other.gameObject.GetComponentInChildren<Player> ().AddToInventory (shape);
-			EventManager.TriggerEvent (EventManager.Event.COIN_COLLECTED);
+			// EventManager.TriggerEvent (EventManager.EVENT_TYPE.COIN_COLLECTED);
 		}
 
 	}

@@ -37,8 +37,8 @@ public class Player : MonoBehaviour
         _controller.onControllerCollidedEvent += onControllerCollider;
         _controller.onTriggerEnterEvent += onTriggerEnterEvent;
         _controller.onTriggerExitEvent += onTriggerExitEvent;
-        EventManager.StartListening (EventManager.Event.TERMINAL_ACTIVATED, new UnityAction (() => controlsActive = false));
-        EventManager.StartListening (EventManager.Event.TERMINAL_DEACTIVATED, new UnityAction (() => controlsActive = true));
+        EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_ACTIVATED, (_) => controlsActive = false);
+        EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_DEACTIVATED,(_)=> controlsActive = true);
     }
 
     #region Event Listeners

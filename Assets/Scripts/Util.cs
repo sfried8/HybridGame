@@ -69,7 +69,7 @@ public class Util
 	public static int[][] Create2DIntArrayFromString (string source, int height, int width)
 	{
 		int[][] ret = CreateZeroed2DIntArray (width, height);
-		char[][] rows = source.Split (new char[] { '\n', '|' }).Select ((r) => r.Trim ().ToCharArray ()).ToArray ();
+		char[][] rows = source.Split (new char[] { '\n' }).Select ((r) => r.Trim ().ToCharArray ()).ToArray ();
 		for (int i = 0; i < height; i++)
 		{
 			for (int j = 0; j < width; j++)
@@ -83,7 +83,7 @@ public class Util
 	public static int[][][] Create3DIntArrayFromString (string source, int depth, int width, int height)
 	{
 		int[][][] ret = CreateZeroed3DIntArray (width, height, depth);
-		string[] planes = source.Split (new string[] { "\n\r\n", "||" }, System.StringSplitOptions.None);
+		string[] planes = source.Split (new string[] { "\n\r\n", "\n\n", "||" }, System.StringSplitOptions.None);
 		for (int i = 0; i < depth; i++)
 		{
 			ret[i] = Create2DIntArrayFromString (planes[i], height, width);

@@ -1,8 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class Terminal : MonoBehaviour, ITerminalListener
+public class Terminal : MonoBehaviour
 {
 
 	// Use this for initialization
@@ -13,13 +12,14 @@ public class Terminal : MonoBehaviour, ITerminalListener
 	private Grid grid;
 	void Start ()
 	{
-		EventManager.StartListening (EventManager.Event.COIN_COLLECTED, new UnityEngine.Events.UnityAction (OnCoinCollected));
+		EventManager.StartListening (EventManager.EVENT_TYPE.COIN_COLLECTED, OnCoinCollected);
+		EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_COMPLETE, OnComplete);
+		EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_INCOMPLETE, OnIncomplete);
 		keyPrompt = GetComponentInChildren<SpriteRenderer> (true);
 		grid = GetComponent<Grid> ();
-		grid.AddTerminalListener (this);
 	}
 
-	void OnCoinCollected ()
+	void OnCoinCollected (EventInfo info)
 	{
 		// transform.localScale *= 1.1f;
 	}
@@ -30,12 +30,12 @@ public class Terminal : MonoBehaviour, ITerminalListener
 		if (wasActive)
 		{
 			grid.OnDeactivated ();
-			EventManager.TriggerEvent (EventManager.Event.TERMINAL_DEACTIVATED);
+			EventManager.TriggerEvent (EventManager.EVENT_TYPE.TERMINAL_DEACTIVATED, null);
 		}
 		else
 		{
 			grid.OnActivated ();
-			EventManager.TriggerEvent (EventManager.Event.TERMINAL_ACTIVATED);
+			EventManager.TriggerEvent (EventManager.EVENT_TYPE.TERMINAL_ACTIVATED, null);
 		}
 		terminalCamera.gameObject.SetActive (!wasActive);
 	}
@@ -64,14 +64,22 @@ public class Terminal : MonoBehaviour, ITerminalListener
 		}
 	}
 
-	public void OnComplete ()
+	public void OnComplete (EventInfo info)
 	{
+		        TerminalPuzzleInfo tpi = (TerminalPuzzleInfo)info;
+        if (tpi?.terminalGrid != grid) {
+            return;
+        }
 		ToggleActive ();
 		screenModel.GetComponent<Renderer> ().material.color = Color.green;
 	}
 
-	public void OnIncomplete ()
+	public void OnIncomplete (EventInfo info)
 	{
+		        TerminalPuzzleInfo tpi = (TerminalPuzzleInfo)info;
+        if (tpi?.terminalGrid != grid) {
+            return;
+        }
 		screenModel.GetComponent<Renderer> ().material.color = Color.white;
 	}
 
