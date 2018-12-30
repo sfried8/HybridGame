@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
 {
     public GameObject inventory;
 
+    public Grid terminalGravityGrid;
     public void CollectCoin (Shape shape)
     {
 
@@ -16,6 +17,7 @@ public class Player : MonoBehaviour
         inventory.GetComponent<Inventory> ().AddShape (shape);
     }
     public float gravity = -25f;
+    private float gravityBase = -25f;
     public float runSpeed = 8f;
     public float groundDamping = 20f; // how fast do we change direction? higher means faster
     public float inAirDamping = 5f;
@@ -29,6 +31,22 @@ public class Player : MonoBehaviour
     private Vector3 _velocity;
 
     public bool controlsActive = true;
+
+    public void OnTerminalComplete(EventInfo info) {
+        TerminalPuzzleInfo tpi = (TerminalPuzzleInfo)info;
+        if (tpi?.terminalGrid != terminalGravityGrid) {
+            return;
+        }
+        gravity = gravityBase/2;
+    }
+
+        public void OnTerminalIncomplete(EventInfo info) {
+        TerminalPuzzleInfo tpi = (TerminalPuzzleInfo)info;
+        if (tpi?.terminalGrid != terminalGravityGrid) {
+            return;
+        }
+        gravity = gravityBase;
+    }
     void Awake ()
     {
         _controller = GetComponent<CharacterController2D> ();
@@ -38,7 +56,11 @@ public class Player : MonoBehaviour
         _controller.onTriggerEnterEvent += onTriggerEnterEvent;
         _controller.onTriggerExitEvent += onTriggerExitEvent;
         EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_ACTIVATED, (_) => controlsActive = false);
+        EventManager.StartListening (EventManager.EVENT_TYPE.HEART_COLLECTED, (_) => controlsActive = false);
         EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_DEACTIVATED,(_)=> controlsActive = true);
+
+                EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_COMPLETE, OnTerminalComplete);
+        EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_INCOMPLETE,OnTerminalIncomplete);
     }
 
     #region Event Listeners
@@ -95,7 +117,7 @@ public class Player : MonoBehaviour
         // we can only jump whilst grounded
         if (_controller.isGrounded && Input.GetKeyDown (KeyCode.Space))
         {
-            _velocity.y = Mathf.Sqrt (2f * jumpHeight * -gravity);
+            _velocity.y = Mathf.Sqrt (2f * jumpHeight * -gravityBase);
 
         }
 

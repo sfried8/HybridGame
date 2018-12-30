@@ -97,6 +97,7 @@ public class Shape : MonoBehaviour
 				{
 					if (Voxels[plane][row][col] != null)
 					{
+						Voxels[plane][row][col].GetComponent<Renderer> ().materials = new Material[1] { materialGreen };
 						Voxels[plane][row][col].GetComponent<Renderer> ().material.color = clearColor;
 					}
 				}

@@ -23,6 +23,7 @@ public class EventManager : MonoBehaviour
         TERMINAL_COMPLETE,
         TERMINAL_INCOMPLETE,
         SHAPE_REMOVED,
+        HEART_COLLECTED,
 
     }
     private Dictionary<EVENT_TYPE, List<EventResponse>> eventDictionary;

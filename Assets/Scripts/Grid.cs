@@ -209,7 +209,7 @@ public class Grid : MonoBehaviour
 		placedShapes.Add (currentShape);
 
 		currentShape.location = currentHover;
-		currentShape.gameObject.SetActive (false);
+		currentShape.transform.parent.gameObject.SetActive (false);
 		currentShape = null;
 		CheckIsComplete ();
 	}
@@ -220,7 +220,7 @@ public class Grid : MonoBehaviour
 			return;
 		}
 		Shape clickedShape = occupiedTiles[currentHover];
-		clickedShape.gameObject.SetActive (true);
+		clickedShape.transform.parent.gameObject.SetActive (true);
 		clickedShape.ClearColorVoxels ();
 		EventManager.TriggerEvent (EventManager.EVENT_TYPE.SHAPE_REMOVED,null);
 
