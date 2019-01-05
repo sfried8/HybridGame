@@ -5,7 +5,7 @@ using UnityEngine;
 public class NormallyOff : MonoBehaviour
 {
     // Start is called before the first frame update
-    public Grid terminalGrid;
+    public TerminalGrid terminalGrid;
     private Vector3 spawnPoint;
     private Quaternion spawnRotation;
     void Start ()

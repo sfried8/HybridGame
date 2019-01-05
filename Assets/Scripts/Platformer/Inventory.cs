@@ -25,10 +25,10 @@ public class Inventory : MonoBehaviour
 		GameObject inventoryShapeInstance = Instantiate (shape.gameObject);
 		inventoryShapeInstance.GetComponentInChildren<Shape> ().ClearColorVoxels ();
 		shapeInstances.Add (inventoryShapeInstance);
-		inventoryShapeInstance.transform.SetParent(transform);
+		inventoryShapeInstance.transform.SetParent (transform);
 		// inventoryShapeInstance.transform.position = new Vector3 (11f, spacing, 85f);
 		inventoryShapeInstance.transform.localScale = new Vector3 (0.75f, 0.75f, 1f);
-		GetComponent<WorldLayoutGroup>().UpdateSpacing();
+		GetComponent<WorldLayoutGroup> ().UpdateSpacing ();
 		// inventoryShapeInstance.GetComponentInChildren<Shape> ().Scale (new Vector3 (0.75f, 0.75f, 0.75f));
 		// spacing += 2.95f;
 	}
@@ -47,7 +47,7 @@ public class Inventory : MonoBehaviour
 	// }
 	public void RefreshSpacing (EventInfo info)
 	{
-		GetComponent<WorldLayoutGroup>().UpdateSpacing();
+		GetComponent<WorldLayoutGroup> ().UpdateSpacing ();
 		// spacing = -8.5f;
 		// foreach (GameObject shape in shapeInstances)
 		// {

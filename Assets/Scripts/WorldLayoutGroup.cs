@@ -15,7 +15,12 @@ public class WorldLayoutGroup : MonoBehaviour
         foreach (Transform t in transform)
         {
             if (t.gameObject.activeSelf) {
-                t.localPosition = new Vector3 (origin.x, origin.y + spacing, origin.z);
+                Shape shape = t.gameObject.GetComponentInChildren<Shape>();
+                if (shape != null) {
+                    shape.targetPosition = new Vector3 (origin.x, origin.y + spacing, origin.z);
+                }
+                    // t.localPosition = new Vector3 (origin.x, origin.y + spacing, origin.z);
+                
                 spacing += verticalSpacing;
             }
         }

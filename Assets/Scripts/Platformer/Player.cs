@@ -5,9 +5,10 @@ using UnityEngine.Events;
 
 public class Player : MonoBehaviour
 {
+    [HideInInspector]
     public GameObject inventory;
 
-    public Grid terminalGravityGrid;
+    public TerminalGrid terminalGravityGrid;
     public void CollectCoin (Shape shape)
     {
 
@@ -32,23 +33,28 @@ public class Player : MonoBehaviour
 
     public bool controlsActive = true;
 
-    public void OnTerminalComplete(EventInfo info) {
-        TerminalPuzzleInfo tpi = (TerminalPuzzleInfo)info;
-        if (tpi?.terminalGrid != terminalGravityGrid) {
+    public void OnTerminalComplete (EventInfo info)
+    {
+        TerminalPuzzleInfo tpi = (TerminalPuzzleInfo) info;
+        if (tpi?.terminalGrid != terminalGravityGrid)
+        {
             return;
         }
-        gravity = gravityBase/2;
+        gravity = gravityBase / 2;
     }
 
-        public void OnTerminalIncomplete(EventInfo info) {
-        TerminalPuzzleInfo tpi = (TerminalPuzzleInfo)info;
-        if (tpi?.terminalGrid != terminalGravityGrid) {
+    public void OnTerminalIncomplete (EventInfo info)
+    {
+        TerminalPuzzleInfo tpi = (TerminalPuzzleInfo) info;
+        if (tpi?.terminalGrid != terminalGravityGrid)
+        {
             return;
         }
         gravity = gravityBase;
     }
     void Awake ()
     {
+        inventory = (FindObjectOfType (typeof (Inventory)) as Inventory).gameObject;
         _controller = GetComponent<CharacterController2D> ();
 
         // listen to some events for illustration purposes
@@ -57,10 +63,10 @@ public class Player : MonoBehaviour
         _controller.onTriggerExitEvent += onTriggerExitEvent;
         EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_ACTIVATED, (_) => controlsActive = false);
         EventManager.StartListening (EventManager.EVENT_TYPE.HEART_COLLECTED, (_) => controlsActive = false);
-        EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_DEACTIVATED,(_)=> controlsActive = true);
+        EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_DEACTIVATED, (_) => controlsActive = true);
 
-                EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_COMPLETE, OnTerminalComplete);
-        EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_INCOMPLETE,OnTerminalIncomplete);
+        EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_COMPLETE, OnTerminalComplete);
+        EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_INCOMPLETE, OnTerminalIncomplete);
     }
 
     #region Event Listeners

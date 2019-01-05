@@ -9,21 +9,32 @@ public class Terminal : MonoBehaviour
 	public GameObject screenModel;
 	private SpriteRenderer keyPrompt;
 	private bool playerIsNear = false;
-	private Grid grid;
+	private TerminalGrid grid;
 	void Start ()
 	{
-		EventManager.StartListening (EventManager.EVENT_TYPE.COIN_COLLECTED, OnCoinCollected);
 		EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_COMPLETE, OnComplete);
 		EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_INCOMPLETE, OnIncomplete);
+		EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_BACK_PRESSED, OnBackPressed);
+		EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_RESTART_PRESSED, OnRestartPressed);
 		keyPrompt = GetComponentInChildren<SpriteRenderer> (true);
-		grid = GetComponent<Grid> ();
+		grid = GetComponent<TerminalGrid> ();
 	}
 
-	void OnCoinCollected (EventInfo info)
+	void OnBackPressed (EventInfo info)
 	{
-		// transform.localScale *= 1.1f;
+		if (grid.isActive)
+		{
+			ToggleActive ();
+		}
 	}
-
+	void OnRestartPressed (EventInfo info)
+	{
+		if (grid.isActive)
+		{
+			grid.ReturnAllToInventory ();
+			// this.SetTimeout (ToggleActive, 1.5f);
+		}
+	}
 	void ToggleActive ()
 	{
 		bool wasActive = terminalCamera.gameObject.activeSelf;
@@ -41,7 +52,7 @@ public class Terminal : MonoBehaviour
 	}
 	void Update ()
 	{
-		if (playerIsNear && Input.GetKeyDown (KeyCode.F))
+		if (playerIsNear && !grid.isActive && Input.GetKeyDown (KeyCode.F))
 		{
 			ToggleActive ();
 		}
@@ -66,20 +77,22 @@ public class Terminal : MonoBehaviour
 
 	public void OnComplete (EventInfo info)
 	{
-		        TerminalPuzzleInfo tpi = (TerminalPuzzleInfo)info;
-        if (tpi?.terminalGrid != grid) {
-            return;
-        }
+		TerminalPuzzleInfo tpi = (TerminalPuzzleInfo) info;
+		if (tpi?.terminalGrid != grid)
+		{
+			return;
+		}
 		ToggleActive ();
 		screenModel.GetComponent<Renderer> ().material.color = Color.green;
 	}
 
 	public void OnIncomplete (EventInfo info)
 	{
-		        TerminalPuzzleInfo tpi = (TerminalPuzzleInfo)info;
-        if (tpi?.terminalGrid != grid) {
-            return;
-        }
+		TerminalPuzzleInfo tpi = (TerminalPuzzleInfo) info;
+		if (tpi?.terminalGrid != grid)
+		{
+			return;
+		}
 		screenModel.GetComponent<Renderer> ().material.color = Color.white;
 	}
 

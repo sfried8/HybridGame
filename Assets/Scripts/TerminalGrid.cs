@@ -5,10 +5,10 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Grid : MonoBehaviour
+public class TerminalGrid : MonoBehaviour
 {
 	public GameObject buttonPrefab;
-	public RectTransform panel;
+	private RectTransform panel;
 	public Shape currentShape;
 	private List<Shape> placedShapes = new List<Shape> ();
 
@@ -44,6 +44,11 @@ public class Grid : MonoBehaviour
 	public void OnDeactivated ()
 	{
 		isActive = false;
+		if (currentShape != null)
+		{
+			ReturnToInventory ();
+
+		}
 		for (int row = 0; row < rowCount; row++)
 		{
 			for (int col = 0; col < colCount; col++)
@@ -54,6 +59,7 @@ public class Grid : MonoBehaviour
 	}
 	void Start ()
 	{
+		panel = GameObject.FindGameObjectsWithTag ("GridPanel") [0].GetComponent<RectTransform> ();
 		grid = puzzles[puzzleIndex].Grid;
 		rowCount = grid.GetLength (0);
 		colCount = grid.GetLength (1);
@@ -87,10 +93,6 @@ public class Grid : MonoBehaviour
 		}
 
 		RefreshGrid ();
-	}
-	public void RightClickDrag (Vector3 drag)
-	{
-
 	}
 	void ButtonHover (int row, int col)
 	{
@@ -173,6 +175,29 @@ public class Grid : MonoBehaviour
 			}
 			currentShape.ColorVoxels (hoverSection);
 		}
+		if (currentShape == null && currentHover != null)
+		{
+			if (occupiedTiles.ContainsKey (currentHover))
+			{
+				Shape hoverShape = occupiedTiles[currentHover];
+				foreach (Point p in hoverShape.GetTileLocations (hoverShape.location))
+				{
+					if (p.Row >= 0 && p.Row < 8 && p.Col >= 0 && p.Col < 8)
+					{
+
+						Image buttonImage = buttons[p.Row, p.Col].GetComponent<Image> ();
+						if (grid[p.Row, p.Col] == 1)
+						{
+							buttonImage.color = new Color (buttonImage.color.r * 0.25f, buttonImage.color.g * 0.5f, buttonImage.color.b * 0.25f);
+						}
+						else
+						{
+							buttonImage.color = new Color (buttonImage.color.r * 0.5f, buttonImage.color.g * 0.25f, buttonImage.color.b * 0.25f);
+						}
+					}
+				}
+			}
+		}
 
 	}
 	bool CheckIsComplete ()
@@ -182,7 +207,7 @@ public class Grid : MonoBehaviour
 			if (wasIncomplete)
 			{
 				wasIncomplete = false;
-				EventManager.TriggerEvent (EventManager.EVENT_TYPE.TERMINAL_COMPLETE,new TerminalPuzzleInfo(){terminalGrid=this});
+				EventManager.TriggerEvent (EventManager.EVENT_TYPE.TERMINAL_COMPLETE, new TerminalPuzzleInfo () { terminalGrid = this });
 
 			}
 			return true;
@@ -190,7 +215,7 @@ public class Grid : MonoBehaviour
 		if (!wasIncomplete)
 		{
 			wasIncomplete = true;
-			EventManager.TriggerEvent (EventManager.EVENT_TYPE.TERMINAL_INCOMPLETE,new TerminalPuzzleInfo(){terminalGrid=this});
+			EventManager.TriggerEvent (EventManager.EVENT_TYPE.TERMINAL_INCOMPLETE, new TerminalPuzzleInfo () { terminalGrid = this });
 		}
 		return false;
 	}
@@ -209,31 +234,73 @@ public class Grid : MonoBehaviour
 		placedShapes.Add (currentShape);
 
 		currentShape.location = currentHover;
+		currentShape.FreezePosition = false;
 		currentShape.transform.parent.gameObject.SetActive (false);
 		currentShape = null;
 		CheckIsComplete ();
 	}
 	public void RemoveCurrentShape ()
 	{
-		if (!occupiedTiles.ContainsKey (currentHover))
+		if (currentShape == null && (currentHover == null || !occupiedTiles.ContainsKey (currentHover)))
 		{
 			return;
 		}
-		Shape clickedShape = occupiedTiles[currentHover];
-		clickedShape.transform.parent.gameObject.SetActive (true);
-		clickedShape.ClearColorVoxels ();
-		EventManager.TriggerEvent (EventManager.EVENT_TYPE.SHAPE_REMOVED,null);
+		Shape shapeToRemove = currentShape ?? occupiedTiles[currentHover];
 
-		if (placedShapes.Contains (clickedShape))
+		shapeToRemove.transform.parent.gameObject.SetActive (true);
+		shapeToRemove.ClearColorVoxels ();
+		EventManager.TriggerEvent (EventManager.EVENT_TYPE.SHAPE_REMOVED, null);
+
+		if (placedShapes.Contains (shapeToRemove))
 		{
 
-			foreach (Point p in clickedShape.GetTileLocations (clickedShape.location))
+			foreach (Point p in shapeToRemove.GetTileLocations (shapeToRemove.location))
 			{
 				occupiedTiles.Remove (p);
 			}
+			placedShapes.Remove (shapeToRemove);
 		}
 		CheckIsComplete ();
-		// currentShape = clickedShape;
+		SetCurrentShape (shapeToRemove);
+	}
+	public void ReturnToInventory ()
+	{
+		if (currentShape != null)
+		{
+			currentShape.ClearColorVoxels ();
+			currentShape.FreezePosition = false;
+		}
+		currentShape = null;
+		EventManager.TriggerEvent (EventManager.EVENT_TYPE.SHAPE_REMOVED, null);
+	}
+	public void ReturnAllToInventory ()
+	{
+		foreach (Shape shape in placedShapes)
+		{
+			shape.transform.parent.gameObject.SetActive (true);
+			shape.ClearColorVoxels ();
+
+			foreach (Point p in shape.GetTileLocations (shape.location))
+			{
+				occupiedTiles.Remove (p);
+			}
+
+		}
+		placedShapes.Clear ();
+		if (currentShape != null)
+		{
+			currentShape.FreezePosition = false;
+		}
+		currentShape = null;
+		EventManager.TriggerEvent (EventManager.EVENT_TYPE.SHAPE_REMOVED, null);
+		CheckIsComplete ();
+		RefreshGrid ();
+	}
+	public void SetCurrentShape (Shape shape)
+	{
+		currentShape = shape;
+		currentShape.FreezePosition = true;
+		currentShape.gameObject.transform.localScale = new Vector3 (1.1f, 1.1f, 1.1f);
 	}
 	public void GetClickTarget ()
 	{
@@ -247,10 +314,10 @@ public class Grid : MonoBehaviour
 				{
 					if (currentShape != null)
 					{
-						currentShape.gameObject.transform.localScale = new Vector3 (0.9f, 0.9f, 0.9f);
+						// currentShape.gameObject.transform.localScale = new Vector3 (0.9f, 0.9f, 0.9f);
 					}
-					currentShape = clickedShape;
-					currentShape.gameObject.transform.localScale = new Vector3 (1.1f, 1.1f, 1.1f);
+					SetCurrentShape (clickedShape);
+					// 
 				}
 			}
 	}
@@ -281,6 +348,8 @@ public class Grid : MonoBehaviour
 			Vector3 pos = Input.mousePosition;
 			pos.z = currentShape.gameObject.transform.position.z - Camera.allCameras[1].transform.position.z;
 			currentShape.gameObject.transform.parent.position = Camera.allCameras[1].ScreenToWorldPoint (pos);
+
+			// currentShape.targetPosition = currentShape.gameObject.transform.localPosition;
 		}
 
 	}

@@ -1,9 +1,17 @@
 ﻿using System.Collections;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Util
 {
+	public delegate void VoidFunction ();
+	public static IEnumerator setTimeoutHelper (VoidFunction action, float seconds)
+	{
+		yield return new WaitForSeconds (seconds);
+		action ();
+		yield return null;
+	}
 
 	public static int[][] CreateZeroed2DIntArray (int width, int height)
 	{

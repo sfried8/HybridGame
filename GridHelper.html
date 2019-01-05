@@ -1,12 +1,19 @@
 <head>
   <style>
-      textarea {
-        width: 194px;
+    textarea {
+      width: 194px;
 
-height: 301px;
-      }
+      height: 301px;
+    }
     .grid {
       width: 312px;
+      margin: 10px;
+      display: inline-flex;
+      border: 2px solid black;
+      flex-wrap: wrap;
+    }
+    .inputgrid {
+      width: 126px;
       margin: 10px;
       display: inline-flex;
       border: 2px solid black;
@@ -17,16 +24,25 @@ height: 301px;
       border: 2px solid black;
       height: 100px;
     }
+    .inputspace {
+      width: 40px;
+      border: 1px solid black;
+      height: 40px;
+    }
 
     .on {
       background: black;
       border: 2px solid white;
     }
+    .inputon {
+      background: black;
+
+      border: 1px solid white;
+    }
   </style>
   <script type="text/javascript">
     function update() {
       try {
-          output.value = input.value.replace(/\n/g,"|");
         let data = input.value.split("\n\n").map(x => x.split("\n"));
         [...document.getElementsByClassName("on")].forEach(d =>
           d.classList.remove("on")
@@ -48,28 +64,52 @@ height: 301px;
         }
       } catch (e) {}
     }
+    function mytoggle(e) {
+      e.classList.toggle("inputon");
+      try {
+        input.value = "";
+        for (let i = 0; i < 3; i++) {
+          for (let j = 0; j < 3; j++) {
+            for (let k = 0; k < 3; k++) {
+              input.value += inputdom[i][j][k].classList.contains("inputon")
+                ? "1"
+                : "0";
+            }
+            input.value += "\n";
+          }
+          input.value += "\n";
+        }
+      } catch (e) {}
+      update();
+    }
 
     let digits = [0, 1, 2];
     let dom = [];
-    let input, output;
+    let input;
     document.addEventListener("DOMContentLoaded", function(event) {
       input = document.getElementById("inp");
-      output = document.getElementById("out");
       dom = digits.map(x =>
         digits.map(y =>
           digits.map(z => document.getElementById(x + "-" + y + "-" + z))
         )
       );
+      inputdom = digits.map(x =>
+        digits.map(y =>
+          digits.map(z =>
+            document.getElementById("input-" + x + "-" + y + "-" + z)
+          )
+        )
+      );
+
       input.oninput = update;
     });
   </script>
 </head>
 <body>
-  <textarea type="text" id="inp"></textarea>
-  <input type="text" id="out" />
+  <textarea type="text" id="inp"></textarea> <input type="text" id="out" />
   <button onclick="update()">Refresh</button>
   <div class="grid">
-      <div class="space" id="0-0-0"></div>
+    <div class="space" id="0-0-0"></div>
     <div class="space" id="0-0-1"></div>
     <div class="space" id="0-0-2"></div>
     <div class="space" id="0-1-0"></div>
@@ -80,8 +120,8 @@ height: 301px;
     <div class="space" id="0-2-2"></div>
   </div>
   <div class="grid">
-      <div class="space" id="1-0-0"></div>
-      <div class="space" id="1-0-1"></div>
+    <div class="space" id="1-0-0"></div>
+    <div class="space" id="1-0-1"></div>
     <div class="space" id="1-0-2"></div>
     <div class="space" id="1-1-0"></div>
     <div class="space" id="1-1-1"></div>
@@ -91,8 +131,8 @@ height: 301px;
     <div class="space" id="1-2-2"></div>
   </div>
   <div class="grid">
-      <div class="space" id="2-0-0"></div>
-      <div class="space" id="2-0-1"></div>
+    <div class="space" id="2-0-0"></div>
+    <div class="space" id="2-0-1"></div>
     <div class="space" id="2-0-2"></div>
     <div class="space" id="2-1-0"></div>
     <div class="space" id="2-1-1"></div>
@@ -100,5 +140,39 @@ height: 301px;
     <div class="space" id="2-2-0"></div>
     <div class="space" id="2-2-1"></div>
     <div class="space" id="2-2-2"></div>
+  </div>
+  <br />
+  <div class="inputgrid">
+    <div class="inputspace" id="input-0-0-0" onclick="mytoggle(this)"></div>
+    <div class="inputspace" id="input-0-0-1" onclick="mytoggle(this)"></div>
+    <div class="inputspace" id="input-0-0-2" onclick="mytoggle(this)"></div>
+    <div class="inputspace" id="input-0-1-0" onclick="mytoggle(this)"></div>
+    <div class="inputspace" id="input-0-1-1" onclick="mytoggle(this)"></div>
+    <div class="inputspace" id="input-0-1-2" onclick="mytoggle(this)"></div>
+    <div class="inputspace" id="input-0-2-0" onclick="mytoggle(this)"></div>
+    <div class="inputspace" id="input-0-2-1" onclick="mytoggle(this)"></div>
+    <div class="inputspace" id="input-0-2-2" onclick="mytoggle(this)"></div>
+  </div>
+  <div class="inputgrid">
+    <div class="inputspace" id="input-1-0-0" onclick="mytoggle(this)"></div>
+    <div class="inputspace" id="input-1-0-1" onclick="mytoggle(this)"></div>
+    <div class="inputspace" id="input-1-0-2" onclick="mytoggle(this)"></div>
+    <div class="inputspace" id="input-1-1-0" onclick="mytoggle(this)"></div>
+    <div class="inputspace" id="input-1-1-1" onclick="mytoggle(this)"></div>
+    <div class="inputspace" id="input-1-1-2" onclick="mytoggle(this)"></div>
+    <div class="inputspace" id="input-1-2-0" onclick="mytoggle(this)"></div>
+    <div class="inputspace" id="input-1-2-1" onclick="mytoggle(this)"></div>
+    <div class="inputspace" id="input-1-2-2" onclick="mytoggle(this)"></div>
+  </div>
+  <div class="inputgrid">
+    <div class="inputspace" id="input-2-0-0" onclick="mytoggle(this)"></div>
+    <div class="inputspace" id="input-2-0-1" onclick="mytoggle(this)"></div>
+    <div class="inputspace" id="input-2-0-2" onclick="mytoggle(this)"></div>
+    <div class="inputspace" id="input-2-1-0" onclick="mytoggle(this)"></div>
+    <div class="inputspace" id="input-2-1-1" onclick="mytoggle(this)"></div>
+    <div class="inputspace" id="input-2-1-2" onclick="mytoggle(this)"></div>
+    <div class="inputspace" id="input-2-2-0" onclick="mytoggle(this)"></div>
+    <div class="inputspace" id="input-2-2-1" onclick="mytoggle(this)"></div>
+    <div class="inputspace" id="input-2-2-2" onclick="mytoggle(this)"></div>
   </div>
 </body>

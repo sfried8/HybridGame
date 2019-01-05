@@ -6,255 +6,299 @@ using UnityEngine;
 public class Shape : MonoBehaviour
 {
 
-	public GameObject voxelPrefab;
-	[TextArea (11, 11)]
-	public string gridSource;
-	public int[][][] grid;
+    public GameObject voxelPrefab;
+    [TextArea (11, 11)]
+    public string gridSource;
+    public int[][][] grid;
 
-	public Material materialRed;
-	public Material materialGreen;
-	public Material materialWhite;
-	public GameObject[][][] Voxels;
-	public Point location;
+    public Material materialRed;
+    public Material materialGreen;
+    public Material materialWhite;
+    public GameObject[][][] Voxels;
+    public Point location;
 
-	private bool _freezeRotation = false;
-	public bool FreezeRotation
-	{
-		get { return _freezeRotation; } set { _freezeRotation = value; }
-	}
-	public List<Point> GetTileLocations (Point _location)
-	{
-		updateRendererFace ();
-		int[][] face = Face ();
-		List<Point> ret = new List<Point> ();
-		for (int row = 0; row < face.Length; row++)
-		{
-			for (int col = 0; col < face[0].Length; col++)
-			{
-				if (face[row][col] == 1)
-				{
-					ret.Add (Point.GridCoord (row + _location.Row - 1, col + _location.Col - 1));
-				}
-			}
-		}
-		return ret;
-	}
+    private bool _freezeRotation = false;
+    public bool FreezeRotation
+    {
+        get { return _freezeRotation; }
+        set { _freezeRotation = value; }
+    }
 
-	private List<GameObject>[][] rendererFace;
-	private void updateRendererFace ()
-	{
-		rendererFace = new List<GameObject>[grid[0].Length][];
+    public bool FreezePosition { get => _freezePosition; set => _freezePosition = value; }
 
-		for (int plane = 0; plane < grid.Length; plane++)
-		{
-			for (int row = 0; row < grid[0].Length; row++)
-			{
-				rendererFace[row] = new List<GameObject>[grid[0][0].Length];
-				for (int col = 0; col < grid[0][0].Length; col++)
-				{
-					if (grid[plane][row][col] == 1)
-					{
-						if (rendererFace[row][col] == null)
-						{
-							rendererFace[row][col] = new List<GameObject> ();
-						}
-						rendererFace[row][col].Add (Voxels[plane][row][col]);
-					}
-				}
+    public Vector3 targetPosition;
+    public List<Point> GetTileLocations (Point _location)
+    {
+        updateRendererFace ();
+        int[][] face = Face ();
+        List<Point> ret = new List<Point> ();
+        for (int row = 0; row < face.Length; row++)
+        {
+            for (int col = 0; col < face[0].Length; col++)
+            {
+                if (face[row][col] == 1)
+                {
+                    ret.Add (Point.GridCoord (row + _location.Row - 1, col + _location.Col - 1));
+                }
+            }
+        }
+        return ret;
+    }
 
-			}
-		}
-	}
-	public int[][] Face ()
-	{
-		int[][] ret = Util.CreateZeroed2DIntArray (grid[0][0].Length, grid[0].Length);
-		for (int plane = 0; plane < grid.Length; plane++)
-		{
-			for (int row = 0; row < grid[0].Length; row++)
-			{
-				for (int col = 0; col < grid[0][0].Length; col++)
-				{
-					if (grid[plane][row][col] == 1)
-					{
-						ret[row][col] = 1;
-					}
-				}
+    private List<GameObject>[][] rendererFace;
+    private void updateRendererFace ()
+    {
+        rendererFace = new List<GameObject>[grid[0].Length][];
 
-			}
-		}
-		return ret;
-	}
+        for (int plane = 0; plane < grid.Length; plane++)
+        {
+            for (int row = 0; row < grid[0].Length; row++)
+            {
+                rendererFace[row] = new List<GameObject>[grid[0][0].Length];
+                for (int col = 0; col < grid[0][0].Length; col++)
+                {
+                    if (grid[plane][row][col] == 1)
+                    {
+                        if (rendererFace[row][col] == null)
+                        {
+                            rendererFace[row][col] = new List<GameObject> ();
+                        }
+                        rendererFace[row][col].Add (Voxels[plane][row][col]);
+                    }
+                }
 
-	private Color clearColor = new Color (1f, 1f, 1f, 53f / 255f);
-	public void ClearColorVoxels ()
-	{
-		for (int row = 0; row < grid[0].Length; row++)
-		{
+            }
+        }
+    }
+    public int[][] Face ()
+    {
+        int[][] ret = Util.CreateZeroed2DIntArray (grid[0][0].Length, grid[0].Length);
+        for (int plane = 0; plane < grid.Length; plane++)
+        {
+            for (int row = 0; row < grid[0].Length; row++)
+            {
+                for (int col = 0; col < grid[0][0].Length; col++)
+                {
+                    if (grid[plane][row][col] == 1)
+                    {
+                        ret[row][col] = 1;
+                    }
+                }
 
-			for (int col = 0; col < grid[0][0].Length; col++)
-			{
-				for (int plane = 0; plane < grid.Length; plane++)
-				{
-					if (Voxels[plane][row][col] != null)
-					{
-						Voxels[plane][row][col].GetComponent<Renderer> ().materials = new Material[1] { materialGreen };
-						Voxels[plane][row][col].GetComponent<Renderer> ().material.color = clearColor;
-					}
-				}
-			}
-		}
-	}
-	private Color greenColor = new Color (0.5f, 1.0f, 0.5f, 0.8f);
-	private Color redColor = new Color (1.0f, 0.5f, 0.5f, 0.8f);
-	public void ColorVoxels (int[][] slots)
-	{
-		// return;
-		updateRendererFace ();
-		// Debug.Log (slots.PrettyPrint ());
-		// Debug.Log (rendererFace.PrettyPrint ());
-		for (int row = slots.Length - 1; row >= 0; row--)
-		{
+            }
+        }
+        return ret;
+    }
 
-			for (int col = 0; col < slots[0].Length; col++)
-			{
-				for (int plane = 0; plane < grid.Length; plane++)
-				{
-					if (Voxels[plane][row][col] != null)
-					{
-						if (slots[2 - row][2 - col] == 1)
-						{
-							// Voxels[plane][row][col].GetComponent<Renderer> ().materials.color = greenColor;
-							Voxels[plane][row][col].GetComponent<Renderer> ().materials = new Material[1] { materialGreen };
+    private Color clearColor = new Color (1f, 1f, 1f, 53f / 255f);
+    public void ClearColorVoxels ()
+    {
+        for (int row = 0; row < grid[0].Length; row++)
+        {
 
-						}
-						else
-						{
-							Voxels[plane][row][col].GetComponent<Renderer> ().materials = new Material[1] { materialRed };
-							// Voxels[plane][row][col].GetComponent<Renderer> ().material.color = redColor;
+            for (int col = 0; col < grid[0][0].Length; col++)
+            {
+                for (int plane = 0; plane < grid.Length; plane++)
+                {
+                    if (Voxels[plane][row][col] != null)
+                    {
+                        Voxels[plane][row][col].GetComponent<Renderer> ().materials = new Material[1] { materialGreen };
+                        Voxels[plane][row][col].GetComponent<Renderer> ().material.color = clearColor;
+                    }
+                }
+            }
+        }
+    }
+    private Color greenColor = new Color (0.5f, 1.0f, 0.5f, 0.8f);
+    private Color redColor = new Color (1.0f, 0.5f, 0.5f, 0.8f);
+    public void ColorVoxels (int[][] slots)
+    {
+        // return;
+        updateRendererFace ();
+        // Debug.Log (slots.PrettyPrint ());
+        // Debug.Log (rendererFace.PrettyPrint ());
+        for (int row = slots.Length - 1; row >= 0; row--)
+        {
 
-						}
-					}
-				}
-			}
-			// Console.Write (Environment.NewLine + Environment.NewLine);
-		}
-	}
-	public Quaternion quaternion;
-	public void rotate (bool roll, bool reverse)
-	{
-		int[][][] newGrid = Util.CreateZeroed3DIntArray (grid); // grid[0].Length, grid[0][0].Length];
-		GameObject[][][] newVoxels = Util.CreateNulled3DGameObjectArray (Voxels); //, Voxels[0].Length, Voxels[0][0].Length];
-		if (roll)
-		{
+            for (int col = 0; col < slots[0].Length; col++)
+            {
+                for (int plane = 0; plane < grid.Length; plane++)
+                {
+                    if (Voxels[plane][row][col] != null)
+                    {
+                        if (slots[2 - row][2 - col] == 1)
+                        {
+                            // Voxels[plane][row][col].GetComponent<Renderer> ().materials.color = greenColor;
+                            Voxels[plane][row][col].GetComponent<Renderer> ().materials = new Material[1] { materialGreen };
 
-			quaternion = Quaternion.AngleAxis (reverse ? -90 : 90, Vector3.forward) * quaternion;
+                        }
+                        else
+                        {
+                            Voxels[plane][row][col].GetComponent<Renderer> ().materials = new Material[1] { materialRed };
+                            // Voxels[plane][row][col].GetComponent<Renderer> ().material.color = redColor;
 
-			for (int plane = 0; plane < grid.Length; plane++)
-			{
-				for (int row = 0; row < grid[0].Length; row++)
-				{
-					for (int col = 0; col < grid[0][0].Length; col++)
-					{
-						if (reverse)
-						{
-							newGrid[plane][row][col] = grid[plane][2 - col][row];
-							newVoxels[plane][row][col] = Voxels[plane][2 - col][row];
-						}
-						else
-						{
-							newGrid[plane][2 - col][row] = grid[plane][row][col];
-							newVoxels[plane][2 - col][row] = Voxels[plane][row][col];
-						}
-					}
+                        }
+                    }
+                }
+            }
+            // Console.Write (Environment.NewLine + Environment.NewLine);
+        }
+    }
+    public enum ROTATE_DIRECTION
+    {
+        ROLL,
+        PITCH,
+        YAW
+    }
+    public Quaternion quaternion;
+    public void rotate (ROTATE_DIRECTION dir, bool reverse)
+    {
+        int[][][] newGrid = Util.CreateZeroed3DIntArray (grid); // grid[0].Length, grid[0][0].Length];
+        GameObject[][][] newVoxels = Util.CreateNulled3DGameObjectArray (Voxels); //, Voxels[0].Length, Voxels[0][0].Length];
+        if (dir == ROTATE_DIRECTION.ROLL)
+        {
 
-				}
-			}
-		}
-		else
-		{
-			quaternion = Quaternion.AngleAxis (reverse ? 90 : -90, Vector3.up) * quaternion;
-			for (int plane = 0; plane < grid.Length; plane++)
-			{
+            quaternion = Quaternion.AngleAxis (reverse ? -90 : 90, Vector3.forward) * quaternion;
 
-				for (int row = 0; row < grid[0].Length; row++)
-				{
+            for (int plane = 0; plane < grid.Length; plane++)
+            {
+                for (int row = 0; row < grid[0].Length; row++)
+                {
+                    for (int col = 0; col < grid[0][0].Length; col++)
+                    {
+                        if (reverse)
+                        {
+                            newGrid[plane][row][col] = grid[plane][2 - col][row];
+                            newVoxels[plane][row][col] = Voxels[plane][2 - col][row];
+                        }
+                        else
+                        {
+                            newGrid[plane][2 - col][row] = grid[plane][row][col];
+                            newVoxels[plane][2 - col][row] = Voxels[plane][row][col];
+                        }
+                    }
 
-					for (int col = 0; col < grid[0][0].Length; col++)
-					{
+                }
+            }
+        }
+        else if (dir == ROTATE_DIRECTION.YAW)
+        {
+            quaternion = Quaternion.AngleAxis (reverse ? 90 : -90, Vector3.up) * quaternion;
+            for (int plane = 0; plane < grid.Length; plane++)
+            {
 
-						if (reverse)
-						{
-							newGrid[plane][row][col] = grid[col][row][2 - plane];
-							newVoxels[plane][row][col] = Voxels[col][row][2 - plane];
-						}
-						else
-						{
-							newGrid[col][row][2 - plane] = grid[plane][row][col];
-							newVoxels[col][row][2 - plane] = Voxels[plane][row][col];
-						}
+                for (int row = 0; row < grid[0].Length; row++)
+                {
 
-					}
+                    for (int col = 0; col < grid[0][0].Length; col++)
+                    {
 
-				}
-			}
+                        if (reverse)
+                        {
+                            newGrid[plane][row][col] = grid[col][row][2 - plane];
+                            newVoxels[plane][row][col] = Voxels[col][row][2 - plane];
+                        }
+                        else
+                        {
+                            newGrid[col][row][2 - plane] = grid[plane][row][col];
+                            newVoxels[col][row][2 - plane] = Voxels[plane][row][col];
+                        }
 
-		}
+                    }
 
-		grid = newGrid;
-		Voxels = newVoxels;
-		updateRendererFace ();
-	}
-	void Awake ()
-	{
-		grid = Util.Create3DIntArrayFromString (gridSource, 3, 3, 3);
-		Voxels = Util.CreateNulled3DGameObjectArray (grid[0][0].Length, grid[0].Length, grid.Length); //, grid[0].Length, grid[0][0].Length];
-		for (int plane = 0; plane < grid.Length; plane++)
-		{
-			for (int row = 0; row < grid[0].Length; row++)
-			{
-				for (int col = 0; col < grid[0][0].Length; col++)
-				{
-					if (grid[plane][row][col] == 1)
-					{
-						GameObject voxel = (GameObject) Instantiate (voxelPrefab);
-						voxel.transform.SetParent (gameObject.transform);
-						voxel.transform.localPosition = new Vector3 (col - 1, 1 - row, plane - 1);
-						Voxels[plane][row][col] = voxel;
-						voxel.name = string.Format ("{0},{1},{2}", plane, row, col);
-					}
-				}
-			}
-		}
-		quaternion = Quaternion.identity;
+                }
+            }
 
-	}
+        }
+        else if (dir == ROTATE_DIRECTION.PITCH)
+        {
+            quaternion = Quaternion.AngleAxis (reverse ? -90 : 90, Vector3.right) * quaternion;
+            for (int plane = 0; plane < grid.Length; plane++)
+            {
 
-	public void Scale (Vector3 scale)
-	{
-		foreach (GameObject[][] x in Voxels)
-		{
-			foreach (GameObject[] y in x)
-			{
-				foreach (GameObject z in y)
-				{
-					if (z != null)
-					{
-						z.transform.localScale = scale;
-					}
-				}
-			}
-		}
-		// gameObject.transform.localScale = new Vector3(scale.x/2,scale.y/2,scale.z/2);
-		gameObject.transform.localScale = scale;
-	}
-	float smooth = 5.0f;
-	void Update ()
-	{
-		if (!FreezeRotation)
-		{
+                for (int row = 0; row < grid[0].Length; row++)
+                {
 
-			transform.rotation = Quaternion.Slerp (transform.rotation, quaternion, Time.deltaTime * smooth);
-		}
-	}
+                    for (int col = 0; col < grid[0][0].Length; col++)
+                    {
+
+                        if (reverse)
+                        {
+                            newGrid[plane][row][col] = grid[2 - row][plane][col];
+                            newVoxels[plane][row][col] = Voxels[2 - row][plane][col];
+                        }
+                        else
+                        {
+                            newGrid[2 - row][plane][col] = grid[plane][row][col];
+                            newVoxels[2 - row][plane][col] = Voxels[plane][row][col];
+                        }
+
+                    }
+
+                }
+            }
+        }
+
+        grid = newGrid;
+        Voxels = newVoxels;
+        updateRendererFace ();
+    }
+    void Awake ()
+    {
+        grid = Util.Create3DIntArrayFromString (gridSource, 3, 3, 3);
+        Voxels = Util.CreateNulled3DGameObjectArray (grid[0][0].Length, grid[0].Length, grid.Length); //, grid[0].Length, grid[0][0].Length];
+        for (int plane = 0; plane < grid.Length; plane++)
+        {
+            for (int row = 0; row < grid[0].Length; row++)
+            {
+                for (int col = 0; col < grid[0][0].Length; col++)
+                {
+                    if (grid[plane][row][col] == 1)
+                    {
+                        GameObject voxel = (GameObject) Instantiate (voxelPrefab);
+                        voxel.transform.SetParent (gameObject.transform);
+                        voxel.transform.localPosition = new Vector3 (col - 1, 1 - row, plane - 1);
+                        Voxels[plane][row][col] = voxel;
+                        voxel.name = string.Format ("{0},{1},{2}", plane, row, col);
+                    }
+                }
+            }
+        }
+        quaternion = Quaternion.identity;
+        targetPosition = transform.localPosition;
+    }
+
+    public void Scale (Vector3 scale)
+    {
+        foreach (GameObject[][] x in Voxels)
+        {
+            foreach (GameObject[] y in x)
+            {
+                foreach (GameObject z in y)
+                {
+                    if (z != null)
+                    {
+                        z.transform.localScale = scale;
+                    }
+                }
+            }
+        }
+        // gameObject.transform.localScale = new Vector3(scale.x/2,scale.y/2,scale.z/2);
+        gameObject.transform.localScale = scale;
+    }
+    float smooth = 5.0f;
+    private bool _freezePosition;
+
+    void Update ()
+    {
+        if (!FreezeRotation)
+        {
+            transform.rotation = Quaternion.Slerp (transform.rotation, quaternion, Time.deltaTime * smooth);
+        }
+        if (!FreezePosition)
+        {
+            transform.parent.localPosition = Vector3.Lerp (transform.parent.localPosition, targetPosition, Time.deltaTime * smooth * 5);
+        }
+    }
 
 }

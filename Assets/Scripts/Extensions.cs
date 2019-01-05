@@ -6,6 +6,10 @@ using UnityEngine;
 public static class Extensions
 {
 
+	public static void SetTimeout (this MonoBehaviour mb, Util.VoidFunction action, float seconds)
+	{
+		mb.StartCoroutine (Util.setTimeoutHelper (action, seconds));
+	}
 	public static string PrettyPrint (this int[, ] grid)
 	{
 

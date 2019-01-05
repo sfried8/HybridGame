@@ -8,7 +8,7 @@ using UnityEngine.Events;
     }
     public class TerminalPuzzleInfo : EventInfo {
         public bool completed = true;
-        public Grid terminalGrid;
+        public TerminalGrid terminalGrid;
     }
 public class EventManager : MonoBehaviour
 {
@@ -24,6 +24,8 @@ public class EventManager : MonoBehaviour
         TERMINAL_INCOMPLETE,
         SHAPE_REMOVED,
         HEART_COLLECTED,
+        TERMINAL_BACK_PRESSED,
+        TERMINAL_RESTART_PRESSED
 
     }
     private Dictionary<EVENT_TYPE, List<EventResponse>> eventDictionary;
@@ -85,6 +87,9 @@ public class EventManager : MonoBehaviour
         }
     }
 
+    public void TriggerEvent2(EVENT_TYPE eventName, EventInfo eventInfo) {
+        TriggerEvent(eventName, eventInfo);
+    }
     public static void TriggerEvent (EVENT_TYPE eventName, EventInfo eventInfo)
     {
         List<EventResponse> thisEvent = null;
