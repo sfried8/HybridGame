@@ -9,7 +9,6 @@ public class Goal : MonoBehaviour
     public SineWaveMovement swm;
     void Start ()
     {
-        Debug.Log (SceneManager.GetActiveScene ().name.Replace ("Platformer", ""));
         level = int.Parse (SceneManager.GetActiveScene ().name.Replace ("Platformer", ""));
     }
     void OnTriggerEnter2D (Collider2D other)

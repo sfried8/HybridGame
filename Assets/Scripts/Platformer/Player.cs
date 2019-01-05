@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -90,6 +91,10 @@ public class Player : MonoBehaviour
     // the Update loop contains a very simple example of moving the character around and controlling the animation
     void Update ()
     {
+        if (Input.GetKeyDown (KeyCode.R))
+        {
+            StartCoroutine (HoldButtonForSeconds (KeyCode.R, 2f, () => SceneManager.LoadScene (SceneManager.GetActiveScene ().name)));
+        }
         if (controlsActive)
         {
             MoveCharacter ();
@@ -146,5 +151,18 @@ public class Player : MonoBehaviour
 
         // grab our current _velocity to use as a base for all calculations
         _velocity = _controller.velocity;
+    }
+    IEnumerator HoldButtonForSeconds (KeyCode key, float seconds, Util.VoidFunction action)
+    {
+        float endTime = Time.time + seconds;
+        while (Time.time <= endTime)
+        {
+            if (!Input.GetKey (key))
+            {
+                yield break;
+            }
+            yield return null;
+        }
+        action ();
     }
 }
