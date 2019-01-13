@@ -28,6 +28,8 @@ public class Inventory : MonoBehaviour
 		inventoryShapeInstance.transform.SetParent (transform);
 		// inventoryShapeInstance.transform.position = new Vector3 (11f, spacing, 85f);
 		inventoryShapeInstance.transform.localScale = new Vector3 (0.75f, 0.75f, 1f);
+		inventoryShapeInstance.GetComponentInChildren<Shape> ().gameObject.transform.localScale = new Vector3 (0.75f, 0.75f, 1f);
+
 		GetComponent<WorldLayoutGroup> ().UpdateSpacing ();
 		// inventoryShapeInstance.GetComponentInChildren<Shape> ().Scale (new Vector3 (0.75f, 0.75f, 0.75f));
 		// spacing += 2.95f;

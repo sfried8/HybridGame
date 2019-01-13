@@ -133,8 +133,9 @@ public class CharacterController2D : MonoBehaviour
     public CharacterCollisionState2D collisionState = new CharacterCollisionState2D ();
     [HideInInspector][NonSerialized]
     public Vector3 velocity;
-    public bool isGrounded { get { return collisionState.below; } }
 
+    public bool isGrounded { get { return collisionState.below; } }
+    public bool Grounded = false;
     const float kSkinWidthFloatFudgeFactor = 0.001f;
 
     #endregion
@@ -210,6 +211,7 @@ public class CharacterController2D : MonoBehaviour
     // [System.Diagnostics.Conditional ("DEBUG_CC2D_RAYS")]
     void DrawRay (Vector3 start, Vector3 dir, Color color)
     {
+        return;
         Debug.DrawRay (start, dir, color);
     }
 
@@ -538,6 +540,10 @@ public class CharacterController2D : MonoBehaviour
                 collisionState.slopeAngle = angle;
             }
         }
+    }
+    void Update ()
+    {
+        Grounded = isGrounded;
     }
 
     #endregion

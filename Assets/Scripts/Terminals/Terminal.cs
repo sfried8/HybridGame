@@ -7,7 +7,6 @@ public class Terminal : MonoBehaviour
 	// Use this for initialization
 	public Camera terminalCamera;
 	public GameObject screenModel;
-	private SpriteRenderer keyPrompt;
 	private bool playerIsNear = false;
 	private TerminalGrid grid;
 	void Start ()
@@ -16,8 +15,28 @@ public class Terminal : MonoBehaviour
 		EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_INCOMPLETE, OnIncomplete);
 		EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_BACK_PRESSED, OnBackPressed);
 		EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_RESTART_PRESSED, OnRestartPressed);
-		keyPrompt = GetComponentInChildren<SpriteRenderer> (true);
 		grid = GetComponent<TerminalGrid> ();
+		var texture = new Texture2D (8, 8, TextureFormat.ARGB32, false);
+		for (int i = 0; i < 8; i++)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				if (grid.puzzles[0].Grid[7 - j, i] == 1)
+				{
+					texture.SetPixel (i, j, Color.white);
+				}
+				else
+				{
+					texture.SetPixel (i, j, Color.black);
+				}
+			}
+		}
+		// set the pixel values
+		texture.filterMode = FilterMode.Point;
+		// Apply all SetPixel calls
+		texture.Apply ();
+		screenModel.GetComponent<Renderer> ().material.mainTexture = texture;
+		// connect texture to material of GameObject this script is attached to
 	}
 
 	void OnBackPressed (EventInfo info)
@@ -63,7 +82,6 @@ public class Terminal : MonoBehaviour
 		if (other.gameObject.CompareTag ("Player"))
 		{
 			playerIsNear = true;
-			keyPrompt.gameObject.SetActive (true);
 		}
 	}
 	void OnTriggerExit2D (Collider2D other)
@@ -71,7 +89,6 @@ public class Terminal : MonoBehaviour
 		if (other.gameObject.CompareTag ("Player"))
 		{
 			playerIsNear = false;
-			keyPrompt.gameObject.SetActive (false);
 		}
 	}
 

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 [System.Serializable]
 public class Shape : MonoBehaviour
 {
@@ -243,8 +244,14 @@ public class Shape : MonoBehaviour
         Voxels = newVoxels;
         updateRendererFace ();
     }
-    void Awake ()
+
+    [ContextMenu ("Regenerate")]
+    public void Regenerate ()
     {
+        while (transform.childCount != 0)
+        {
+            DestroyImmediate (transform.GetChild (0).gameObject);
+        }
         grid = Util.Create3DIntArrayFromString (gridSource, 3, 3, 3);
         Voxels = Util.CreateNulled3DGameObjectArray (grid[0][0].Length, grid[0].Length, grid.Length); //, grid[0].Length, grid[0][0].Length];
         for (int plane = 0; plane < grid.Length; plane++)
@@ -258,6 +265,7 @@ public class Shape : MonoBehaviour
                         GameObject voxel = (GameObject) Instantiate (voxelPrefab);
                         voxel.transform.SetParent (gameObject.transform);
                         voxel.transform.localPosition = new Vector3 (col - 1, 1 - row, plane - 1);
+                        voxel.transform.localScale = new Vector3 (0.95f, 0.95f, 0.95f);
                         Voxels[plane][row][col] = voxel;
                         voxel.name = string.Format ("{0},{1},{2}", plane, row, col);
                     }

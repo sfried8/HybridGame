@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 2411896396834569146}
   - component: {fileID: 2411896396834569147}
   - component: {fileID: 2411896396834569144}
+  - component: {fileID: 3244924988565883299}
   m_Layer: 9
-  m_Name: KeyTerminal
+  m_Name: Terminal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -80,7 +81,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buttonPrefab: {fileID: 1000013175322306, guid: cdce7a46dbe308b4f8d396c7756023b3,
     type: 3}
-  panel: {fileID: 0}
   currentShape: {fileID: 0}
   puzzles:
   - {fileID: 0}
@@ -98,6 +98,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grid: {fileID: 0}
+--- !u!114 &3244924988565883299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2411896396834569143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8457b0be89e2684fac7997ba4fa0033, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2411896397705472656
 GameObject:
   m_ObjectHideFlags: 0

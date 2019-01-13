@@ -104,7 +104,11 @@ public class Player : MonoBehaviour
     {
         if (_controller.isGrounded)
             _velocity.y = 0;
+        if (_controller.isGrounded && Input.GetKeyDown (KeyCode.Space))
+        {
+            _velocity.y = Mathf.Sqrt (2f * jumpHeight * -gravityBase);
 
+        }
         if (Input.GetKey (KeyCode.D))
         {
             normalizedHorizontalSpeed = 1;
@@ -126,11 +130,6 @@ public class Player : MonoBehaviour
         }
 
         // we can only jump whilst grounded
-        if (_controller.isGrounded && Input.GetKeyDown (KeyCode.Space))
-        {
-            _velocity.y = Mathf.Sqrt (2f * jumpHeight * -gravityBase);
-
-        }
 
         // apply horizontal speed smoothing it. dont really do this with Lerp. Use SmoothDamp or something that provides more control
         var smoothedMovementFactor = _controller.isGrounded ? groundDamping : inAirDamping; // how fast do we change direction?

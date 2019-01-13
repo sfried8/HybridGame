@@ -1332,6 +1332,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   totalHorizontalRays: 8
   totalVerticalRays: 4
+  Grounded: 0
 --- !u!4 &532195539
 Transform:
   m_ObjectHideFlags: 0
@@ -1846,11 +1847,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TerminalGridPrefab
       objectReference: {fileID: 0}
-    - target: {fileID: 7530404169792364912, guid: 45535798a3a906f429e3296f7d052f05,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -248.54984
-      objectReference: {fileID: 0}
     - target: {fileID: 7530404170367230363, guid: 45535798a3a906f429e3296f7d052f05,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1961,16 +1957,6 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 2128464467}
-    - target: {fileID: 7530404169004518729, guid: 45535798a3a906f429e3296f7d052f05,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -362.94986
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530404169004518729, guid: 45535798a3a906f429e3296f7d052f05,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -213.89993
-      objectReference: {fileID: 0}
     - target: {fileID: 7530404169821755838, guid: 45535798a3a906f429e3296f7d052f05,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -1994,11 +1980,6 @@ PrefabInstance:
     - target: {fileID: 7530404169821755838, guid: 45535798a3a906f429e3296f7d052f05,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530404169821755838, guid: 45535798a3a906f429e3296f7d052f05,
-        type: 3}
-      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7530404169295114840, guid: 45535798a3a906f429e3296f7d052f05,
@@ -2025,36 +2006,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530404169295114840, guid: 45535798a3a906f429e3296f7d052f05,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530404169980707596, guid: 45535798a3a906f429e3296f7d052f05,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -213.89993
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530404169980707596, guid: 45535798a3a906f429e3296f7d052f05,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -116.92999
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530404169792364915, guid: 45535798a3a906f429e3296f7d052f05,
-        type: 3}
-      propertyPath: m_TagString
-      value: GridPanel
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530404170187132918, guid: 45535798a3a906f429e3296f7d052f05,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 1.0350342
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530404170187132918, guid: 45535798a3a906f429e3296f7d052f05,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -2.4299927
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45535798a3a906f429e3296f7d052f05, type: 3}

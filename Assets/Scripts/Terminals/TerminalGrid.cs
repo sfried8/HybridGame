@@ -267,6 +267,7 @@ public class TerminalGrid : MonoBehaviour
 	{
 		if (currentShape != null)
 		{
+			currentShape.gameObject.transform.localScale = new Vector3 (0.75f, 0.75f, 0.75f);
 			currentShape.ClearColorVoxels ();
 			currentShape.FreezePosition = false;
 		}
@@ -279,6 +280,7 @@ public class TerminalGrid : MonoBehaviour
 		{
 			shape.transform.parent.gameObject.SetActive (true);
 			shape.ClearColorVoxels ();
+			shape.gameObject.transform.localScale = new Vector3 (0.75f, 0.75f, 0.75f);
 
 			foreach (Point p in shape.GetTileLocations (shape.location))
 			{

@@ -9,7 +9,8 @@ public class MainMenuButton : MonoBehaviour
     public int level;
     void Awake ()
     {
-        if (!LevelSelection.instance.unlocked.Contains (level))
+        GetComponentInChildren<Text> ().text = level.ToString ();
+        if (!LevelSelection.IsLevelUnlocked (level))
         {
             GetComponent<Button> ().interactable = false;
             GetComponentInChildren<Text> ().color = Color.gray;

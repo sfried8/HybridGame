@@ -8,7 +8,7 @@ public class Util
 	public delegate void VoidFunction ();
 	public static IEnumerator setTimeoutHelper (VoidFunction action, float seconds)
 	{
-		yield return new WaitForSeconds (seconds);
+		yield return new WaitForSecondsRealtime (seconds);
 		action ();
 		yield return null;
 	}

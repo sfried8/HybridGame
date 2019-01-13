@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class LevelSelection : MonoBehaviour
 {
     // Start is called before the first frame update
+    public bool UnlockAllLevels;
     int[] levels = new int[] { 1, 2, 3 };
     public List<int> unlocked = new List<int> () { 1 };
     private static LevelSelection levelSelection;
@@ -20,7 +21,7 @@ public class LevelSelection : MonoBehaviour
                 DontDestroyOnLoad (levelSelection);
                 if (!levelSelection)
                 {
-                    Debug.LogError ("There needs to be one active EventManger script on a GameObject in your scene.");
+                    Debug.LogError ("There needs to be one active LevelSelection script on a GameObject in your scene.");
                 }
                 else
                 {
@@ -39,20 +40,19 @@ public class LevelSelection : MonoBehaviour
     }
     void Start ()
     {
-
-        Object[] objs = GameObject.FindObjectsOfType (typeof (LevelSelection));
-
-        if (objs.Length > 1)
+        if (GameObject.FindObjectsOfType (typeof (LevelSelection)).Length > 1)
         {
             Destroy (this.gameObject);
         }
-
         DontDestroyOnLoad (this.gameObject);
-
+    }
+    public static bool IsLevelUnlocked (int level)
+    {
+        return instance.UnlockAllLevels || instance.unlocked.Contains (level);
     }
     public static void OnClick (int level)
     {
-        if (!instance.unlocked.Contains (level))
+        if (!IsLevelUnlocked (level))
         {
             return;
         }
