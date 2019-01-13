@@ -18,12 +18,15 @@ public class Coin : MonoBehaviour
 		shape = GetComponentInChildren<Shape> ();
 		// shapeInstance = shape.transform.parent.gameObject;
 
-		gameObject.SetLayerRecursively (LayerMask.NameToLayer ("Default"));
 		// shapeInstance.transform.SetParent (gameObject.transform);
 		// shapeInstance.transform.localPosition = Vector3.zero;
 		shape.transform.parent.localScale = new Vector3 (0.25f, 0.25f, 0.25f);
 		shape.FreezeRotation = true;
-		SineWaveMovement swm = shape.transform.parent.gameObject.AddComponent<SineWaveMovement> ();
+		shape.gridSource = shapeData.ShapeString;
+		shape.Regenerate ();
+		gameObject.SetLayerRecursively (LayerMask.NameToLayer ("Default"));
+		gameObject.layer = LayerMask.NameToLayer ("Terminals");
+		SineWaveMovement swm = gameObject.AddComponent<SineWaveMovement> ();
 		swm.Magnitude = 0.09f;
 		swm.VerticalSpeed = 2;
 		swm.RotationVelocityX = Random.Range (-35, 35);
@@ -52,18 +55,19 @@ public class Coin : MonoBehaviour
 		// shapeInstance.GetComponentInChildren<Shape> ().gridSource = shapeData.ShapeString;
 		// shapeInstance.GetComponentInChildren<Shape> ().Regenerate ();
 		shape = GetComponentInChildren<Shape> ();
-		gameObject.SetLayerRecursively (LayerMask.NameToLayer ("Default"));
 		// shapeInstance = shape.transform.parent.gameObject;
 		shape.FreezeRotation = true;
 		shape.gridSource = shapeData.ShapeString;
 		shape.Regenerate ();
+		gameObject.SetLayerRecursively (LayerMask.NameToLayer ("Default"));
+		this.name = shapeData.name + " Coin";
 	}
 	void OnTriggerEnter2D (Collider2D other)
 	{
 		if (other.gameObject.CompareTag ("Player"))
 		{
 			Destroy (gameObject);
-			other.gameObject.GetComponentInChildren<Player> ().AddToInventory (shape.gameObject);
+			other.gameObject.GetComponentInChildren<Player> ().AddToInventory (shape.transform.parent.gameObject);
 			// EventManager.TriggerEvent (EventManager.EVENT_TYPE.COIN_COLLECTED);
 		}
 

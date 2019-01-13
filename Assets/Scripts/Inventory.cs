@@ -22,10 +22,13 @@ public class Inventory : MonoBehaviour
 	public void AddShape (GameObject shape)
 	{
 		shapes.Add (shape);
-		GameObject inventoryShapeInstance = Instantiate (shape.gameObject);
+		GameObject inventoryShapeInstance = shape.gameObject; //Instantiate (shape.gameObject);
+		inventoryShapeInstance.GetComponentInChildren<Shape> ().FreezeRotation = false;
+		inventoryShapeInstance.transform.rotation = Quaternion.identity;
 		inventoryShapeInstance.GetComponentInChildren<Shape> ().ClearColorVoxels ();
 		shapeInstances.Add (inventoryShapeInstance);
 		inventoryShapeInstance.transform.SetParent (transform);
+		inventoryShapeInstance.SetLayerRecursively (LayerMask.NameToLayer ("UI"));
 		// inventoryShapeInstance.transform.position = new Vector3 (11f, spacing, 85f);
 		inventoryShapeInstance.transform.localScale = new Vector3 (0.75f, 0.75f, 1f);
 		inventoryShapeInstance.GetComponentInChildren<Shape> ().gameObject.transform.localScale = new Vector3 (0.75f, 0.75f, 1f);

@@ -49,6 +49,7 @@ public class TerminalGrid : MonoBehaviour
 			ReturnToInventory ();
 
 		}
+		ButtonHoverExit ();
 		for (int row = 0; row < rowCount; row++)
 		{
 			for (int col = 0; col < colCount; col++)

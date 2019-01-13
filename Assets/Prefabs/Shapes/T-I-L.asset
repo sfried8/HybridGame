@@ -9,7 +9,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8ca5e1ea50d3a04ab2bf1f7f16fb4ec, type: 3}
-  m_Name: Data
+  m_Script: {fileID: 11500000, guid: 97c7dadbabaea764989647e2e59553dd, type: 3}
+  m_Name: T-I-L
   m_EditorClassIdentifier: 
-  PuzzleString: 
+  ShapeString: '000
+
+    010
+
+    110
+
+
+    000
+
+    000
+
+    100
+
+
+    100
+
+    010
+
+    110'

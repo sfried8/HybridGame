@@ -295,6 +295,7 @@ public class Shape : MonoBehaviour
         gameObject.transform.localScale = scale;
     }
     float smooth = 5.0f;
+    [SerializeField]
     private bool _freezePosition;
 
     void Update ()

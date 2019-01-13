@@ -9,25 +9,30 @@ public class Terminal : MonoBehaviour
 	public GameObject screenModel;
 	private bool playerIsNear = false;
 	private TerminalGrid grid;
-	void Start ()
+	[ContextMenu ("Create Texture")]
+	public void CreateTexture ()
 	{
-		EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_COMPLETE, OnComplete);
-		EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_INCOMPLETE, OnIncomplete);
-		EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_BACK_PRESSED, OnBackPressed);
-		EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_RESTART_PRESSED, OnRestartPressed);
 		grid = GetComponent<TerminalGrid> ();
-		var texture = new Texture2D (8, 8, TextureFormat.ARGB32, false);
+		var texture = new Texture2D (12, 8, TextureFormat.ARGB32, false);
 		for (int i = 0; i < 8; i++)
 		{
-			for (int j = 0; j < 8; j++)
+			for (int j = 0; j < 12; j++)
 			{
-				if (grid.puzzles[0].Grid[7 - j, i] == 1)
+				if (j < 2 || j > 9)
 				{
-					texture.SetPixel (i, j, Color.white);
+					texture.SetPixel (j, i, Color.black);
 				}
 				else
 				{
-					texture.SetPixel (i, j, Color.black);
+
+					if (grid.puzzles[0].Grid[7 - i, j - 2] == 1)
+					{
+						texture.SetPixel (j, i, Color.white);
+					}
+					else
+					{
+						texture.SetPixel (j, i, Color.black);
+					}
 				}
 			}
 		}
@@ -35,7 +40,15 @@ public class Terminal : MonoBehaviour
 		texture.filterMode = FilterMode.Point;
 		// Apply all SetPixel calls
 		texture.Apply ();
-		screenModel.GetComponent<Renderer> ().material.mainTexture = texture;
+		screenModel.GetComponent<Renderer> ().sharedMaterial.mainTexture = texture;
+	}
+	void Start ()
+	{
+		EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_COMPLETE, OnComplete);
+		EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_INCOMPLETE, OnIncomplete);
+		EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_BACK_PRESSED, OnBackPressed);
+		EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_RESTART_PRESSED, OnRestartPressed);
+		CreateTexture ();
 		// connect texture to material of GameObject this script is attached to
 	}
 

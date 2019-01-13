@@ -6,21 +6,31 @@ public class WorldLayoutGroup : MonoBehaviour
 {
     // Start is called before the first frame update
     public Vector3 origin;
-[HideInInspector]
+    [HideInInspector]
     public float verticalSpacing;
 
-    public void UpdateSpacing()
+    public void UpdateSpacing ()
     {
         float spacing = 0f;
         foreach (Transform t in transform)
         {
-            if (t.gameObject.activeSelf) {
-                Shape shape = t.gameObject.GetComponentInChildren<Shape>();
-                if (shape != null) {
-                    shape.targetPosition = new Vector3 (origin.x, origin.y + spacing, origin.z);
+            if (t.gameObject.activeSelf)
+            {
+                Shape shape = t.gameObject.GetComponentInChildren<Shape> ();
+                if (shape != null)
+                {
+                    if (!shape.FreezePosition)
+                    {
+                        shape.targetPosition = new Vector3 (origin.x, origin.y + spacing, origin.z);
+
+                    }
+                    else
+                    {
+                        continue;
+                    }
                 }
-                    // t.localPosition = new Vector3 (origin.x, origin.y + spacing, origin.z);
-                
+                // t.localPosition = new Vector3 (origin.x, origin.y + spacing, origin.z);
+
                 spacing += verticalSpacing;
             }
         }
