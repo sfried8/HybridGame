@@ -9,7 +9,6 @@ public class Inventory : MonoBehaviour
 	public List<GameObject> shapes;
 	private List<GameObject> shapeInstances;
 	// Use this for initialization
-	float spacing = -8.5f;
 	void Start ()
 	{
 		if (shapeInstances == null)

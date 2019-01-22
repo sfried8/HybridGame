@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 3828464719642351810}
   - component: {fileID: 3828464719642351809}
   - component: {fileID: 3828464719642351808}
-  - component: {fileID: 3828464719642351812}
+  - component: {fileID: 4965961167812947243}
+  - component: {fileID: 3377416339716454393}
   m_Layer: 8
   m_Name: Box
   m_TagString: Untagged
@@ -127,7 +128,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &3828464719642351812
+--- !u!114 &4965961167812947243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3828464719642351822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc39cdc7121313d46874730f28c160a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  terminalGrid: {fileID: 0}
+--- !u!114 &3377416339716454393
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -139,4 +153,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a59841ab9d636d34db1e1fca3be1b0c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  terminalGrid: {fileID: 0}

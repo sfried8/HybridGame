@@ -2,14 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LevelSelection : MonoBehaviour
 {
     // Start is called before the first frame update
+    private bool initialized = false;
     public bool UnlockAllLevels;
-    int[] levels = new int[] { 1, 2, 3 };
+    public List<int> levels = new List<int> ();
     public List<int> unlocked = new List<int> () { 1 };
     private static LevelSelection levelSelection;
+
+    public RectTransform panel;
+    public GameObject mainMenuButtonPrefab;
 
     public static LevelSelection instance
     {
@@ -35,8 +40,36 @@ public class LevelSelection : MonoBehaviour
 
     void Init ()
     {
+        if (initialized)
+        {
+            return;
+        }
+        initialized = true;
         DontDestroyOnLoad (this);
         EventManager.StartListening (EventManager.EVENT_TYPE.HEART_COLLECTED, LevelComplete);
+        levels = new List<int> ();
+        for (int i = 1; i < SceneManager.sceneCountInBuildSettings; i++)
+        {
+            string scenePath = SceneUtility.GetScenePathByBuildIndex (i);
+            int lastSlash = scenePath.LastIndexOf ("/");
+            string sceneName = (scenePath.Substring (lastSlash + 1, scenePath.LastIndexOf (".") - lastSlash - 1));
+            int level;
+            int.TryParse (sceneName.Replace ("Platformer", ""), out level);
+            if (level != 0)
+            {
+                levels.Add (level);
+
+            }
+        }
+        levels.Sort ();
+
+        foreach (int level in levels)
+        {
+            GameObject button = Instantiate (mainMenuButtonPrefab);
+            button.transform.SetParent (panel);
+            button.GetComponent<MainMenuButton> ().level = level;
+            button.GetComponentInChildren<Text> ().text = level.ToString ();
+        }
     }
     void Start ()
     {
@@ -45,6 +78,7 @@ public class LevelSelection : MonoBehaviour
             Destroy (this.gameObject);
         }
         DontDestroyOnLoad (this.gameObject);
+        Init ();
     }
     public static bool IsLevelUnlocked (int level)
     {
@@ -68,5 +102,9 @@ public class LevelSelection : MonoBehaviour
             unlocked.Add (cgi.level + 1);
 
         }
+    }
+    public void CloseApplication ()
+    {
+        Application.Quit ();
     }
 }

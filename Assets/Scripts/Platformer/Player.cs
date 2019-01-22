@@ -95,6 +95,10 @@ public class Player : MonoBehaviour
         {
             StartCoroutine (HoldButtonForSeconds (KeyCode.R, 2f, () => SceneManager.LoadScene (SceneManager.GetActiveScene ().name)));
         }
+        if (Input.GetKeyDown (KeyCode.Escape))
+        {
+            StartCoroutine (HoldButtonForSeconds (KeyCode.Escape, 2f, () => SceneManager.LoadScene ("MainMenu")));
+        }
         if (controlsActive)
         {
             MoveCharacter ();

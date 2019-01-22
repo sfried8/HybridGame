@@ -8,11 +8,14 @@ public class Terminal : MonoBehaviour
 	public Camera terminalCamera;
 	public GameObject screenModel;
 	private bool playerIsNear = false;
-	private TerminalGrid grid;
+	public TerminalGrid grid;
 	[ContextMenu ("Create Texture")]
 	public void CreateTexture ()
 	{
-		grid = GetComponent<TerminalGrid> ();
+		if (grid == null)
+		{
+			grid = GetComponent<TerminalGrid> ();
+		}
 		var texture = new Texture2D (12, 8, TextureFormat.ARGB32, false);
 		for (int i = 0; i < 8; i++)
 		{
@@ -56,7 +59,7 @@ public class Terminal : MonoBehaviour
 	{
 		if (grid.isActive)
 		{
-			ToggleActive ();
+			ToggleActive (false);
 		}
 	}
 	void OnRestartPressed (EventInfo info)
@@ -67,26 +70,27 @@ public class Terminal : MonoBehaviour
 			// this.SetTimeout (ToggleActive, 1.5f);
 		}
 	}
-	void ToggleActive ()
+	void ToggleActive (bool activate)
 	{
-		bool wasActive = terminalCamera.gameObject.activeSelf;
-		if (wasActive)
+
+		if (activate && !grid.isActive)
+		{
+			grid.OnActivated ();
+			EventManager.TriggerEvent (EventManager.EVENT_TYPE.TERMINAL_ACTIVATED, null);
+
+		}
+		else if (!activate && grid.isActive)
 		{
 			grid.OnDeactivated ();
 			EventManager.TriggerEvent (EventManager.EVENT_TYPE.TERMINAL_DEACTIVATED, null);
 		}
-		else
-		{
-			grid.OnActivated ();
-			EventManager.TriggerEvent (EventManager.EVENT_TYPE.TERMINAL_ACTIVATED, null);
-		}
-		terminalCamera.gameObject.SetActive (!wasActive);
+		terminalCamera.gameObject.SetActive (activate);
 	}
 	void Update ()
 	{
 		if (playerIsNear && !grid.isActive && Input.GetKeyDown (KeyCode.F))
 		{
-			ToggleActive ();
+			ToggleActive (true);
 		}
 	}
 
@@ -112,7 +116,7 @@ public class Terminal : MonoBehaviour
 		{
 			return;
 		}
-		ToggleActive ();
+		ToggleActive (false);
 		screenModel.GetComponent<Renderer> ().material.color = Color.green;
 	}
 
@@ -126,4 +130,13 @@ public class Terminal : MonoBehaviour
 		screenModel.GetComponent<Renderer> ().material.color = Color.white;
 	}
 
+	private void OnDrawGizmos ()
+	{
+		if (grid?.gameObject != null && grid.gameObject != gameObject)
+		{
+
+			Gizmos.color = Color.green;
+			Gizmos.DrawLine (transform.position, grid.transform.position);
+		}
+	}
 }
