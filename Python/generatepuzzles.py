@@ -1,38 +1,74 @@
-#!/usr/local/bin/python
-# -*- coding: utf-8 -*-
 from copy import deepcopy
 from Board import Board
-from colorama import init, Back, Style
-
-def deepequals(a, b):
-    if len(a) != len(b):
-        return False
-    for i in range(len(a)):
-        if list(a[i]) != list(b[i]):
-            return False
-    return True
-
-
-class Shape():
-    def __init__(self, grid):
-        self.grid = grid
-        self.faces = []
-        face = deepcopy(self.grid)
-        for r in range(4):
-            if not any([deepequals(x, face) for x in self.faces]):
-                self.faces.append(face)
-                self.faces.append(face[::-1])
-            face = [*zip(*face[::-1])]
-
-    def __str__(self):
-        return "|".join(["".join([str(x) for x in row]) for row in self.grid])
-
-    def locationsRelativeTo(self, otherLocation, rotation=0):
-        return [(i+otherLocation[0], j+otherLocation[1]) for i in range(len(self.faces[rotation])) for j in range(len(self.faces[rotation][i])) if self.faces[rotation][i][j] == 1]
-
+from Shape import *
+from colorama import init as colorInit, Back, Style
 
 def boardString(board):
     return ["".join([["  ",". "][x]if x in [0, 1] else x for x in row]) for row in board]
+
+def initShapes(shapeStringArray):
+    shapes = [shapeStringToShape(shapestring) for shapestring in shapeStringArray]
+    COLORS = [Back.RED,Back.GREEN,Back.YELLOW,Back.BLUE,Back.CYAN,Back.MAGENTA]
+    for i in range(len(shapes)):
+        shapes[i].symbol = COLORS[i]+"  "+Style.RESET_ALL
+    return shapes
+
+def findPotentialSpots(shapes, board):
+    potentialspots = []
+    for s in shapes:
+        potentialspots.append([(spot, s.locationsRelativeTo(
+            spot[1:], spot[0])) for spot in board.findSpots(s)])
+    return potentialspots
+
+def validateSolutionsRecursive(spots, potentialspots, target,solutions):
+    if len(potentialspots) == 0:
+        if set(sum([x[1]for x in spots], [])) == target:
+            solutions.append([x[0] for x in spots])
+        return
+    shape = potentialspots.pop()
+    for s in shape:
+        if any(x in y[1] for y in spots for x in s[1]):
+            continue
+        validateSolutionsRecursive(
+            spots + [s], potentialspots[:], target,solutions)
+
+def filterDuplicates(solutions,shapes):
+    duplicates = [(len(shapes)-i-1,len(shapes)-j-1) for i in range(len(shapes)-1) for j in range(i+1,len(shapes)) if str(shapes[i])==str(shapes[j])]
+    result = []
+    for sol in solutions:
+        valid = True
+        for d in duplicates:
+            sol2 = sol[:]
+            sol2[d[0]],sol2[d[1]] = sol2[d[1]],sol2[d[0]]
+            if tuple(sol2) in result:
+                valid = False
+        if valid:
+            result.append(tuple(sol))
+    return result
+
+
+def printSolutions(solutions,shapes,b):
+    bss = []
+    for sol in solutions:
+        b.shapes = {}
+        for i in range(len(sol)):
+            b.addShape(shapes[~i], sol[i][1:], sol[i][0])
+        bss.append(boardString(b.shapeGrid()))
+    print (str(len(solutions))+" solutions found")
+    for row in range(len(bss[0])):
+        print(" ".join(bs[row] for bs in bss))
+    # for bs in bss:
+    #     for bsl in bs:
+    #         print (bsl)
+
+def main(shapeStringArray,board):
+    colorInit()
+    shapes = initShapes(shapeStringArray)
+    potentialspots = findPotentialSpots(shapes,board)
+    solutions = []
+    validateSolutionsRecursive([], potentialspots, board.allOpenings,solutions)
+    newsols = filterDuplicates(solutions,shapes)
+    printSolutions(newsols,shapes,board)
 
 
 b = Board([
@@ -46,69 +82,47 @@ b = Board([
     [0, 0, 0, 0, 1, 1, 0, 0]]
 )
 
-shapestring = """
-                111
-                101
+shapestrings = ["""
+                000
+                010
+                110
+                -
+                000
+                000
                 100
                 -
-                111
-                001
-                -
-                11
-                01
-                10
+                100
+                010
+                110
+                """,
                 """
+                000
+                010
+                110
+                -
+                000
+                000
+                100
+                -
+                100
+                010
+                110
+                """,
+                """
+                000
+                010
+                111
+                -
+                000
+                000
+                101
+                -
+                000
+                000
+                111
+                """]
+
+main(shapestrings,b)
 
 
-
-def shapeStringToArray(s):
-    result = []
-    for shape in s.split("-"):
-        rows = [x.strip() for x in shape.strip().split("\n")]
-        g = [[int(c) for c in r]for r in rows]
-        result.append(Shape(g))
-    return result
-
-
-shapes = shapeStringToArray(shapestring)
-init()
-for x in zip(shapes, range(len(shapes))):
-    
-    x[0].symbol = [Back.RED,Back.GREEN,Back.YELLOW,Back.BLUE][x[1]]+"  "+Style.RESET_ALL
-
-potentialspots = []
-for s in shapes:
-    potentialspots.append([(spot, s.locationsRelativeTo(
-        spot[1:], spot[0])) for spot in b.findSpots(s)])
-
-
-solutions = []
-
-
-def validateSolutionsRecursive(spots, potentialspots, target):
-    if len(potentialspots) == 0:
-        if set(sum([x[1]for x in spots], [])) == target:
-            solutions.append([x[0] for x in spots])
-        return
-    shape = potentialspots.pop()
-    for s in shape:
-        if any(x in y[1] for y in spots for x in s[1]):
-            continue
-        validateSolutionsRecursive(
-            spots + [s], potentialspots[:], target)
-
-
-validateSolutionsRecursive([], potentialspots, b.allOpenings)
-
-
-bss = []
-for sol in solutions:
-    b.shapes = {}
-    for i in range(len(sol)):
-        b.addShape(shapes[~i], sol[i][1:], sol[i][0])
-    bss.append(boardString(b.shapeGrid()))
-
-print (str(len(solutions))+" solutions found")
-
-print("\n".join(['\n'.join(bs) for bs in bss]))
 

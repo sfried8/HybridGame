@@ -13,7 +13,7 @@ class Board():
                                 for j in range(self.width) if self.puzzle[i][j] == 1])
 
     def __str__(self):
-        return [" ".join([" ."[x]if x in [0, 1] else x for x in row]) for row in self.puzzle]
+        return [" ".join([".."[x]if x in [0, 1] else x for x in row]) for row in self.puzzle]
 
     def shapeFits(self, shape, location, rotation=0):
         if (location, rotation) in self.shapes:
