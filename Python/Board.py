@@ -1,6 +1,9 @@
 from copy import deepcopy
 
-
+def boardStringToBoard(boardString):
+    rows = [row.strip() for row in boardString.split("\n")]
+    grid = [[int(x) for x in row]for row in rows]
+    return Board(grid)
 class Board():
     def __init__(self, puzzle):
         self.puzzle = puzzle
@@ -18,8 +21,8 @@ class Board():
     def shapeFits(self, shape, location, rotation=0):
         if (location, rotation) in self.shapes:
             return False
-        sg = self.shapeGrid()
-        if any([x[0] >= self.height or x[1] >= self.height or sg[x[0]][x[1]] != 1 for x in shape.locationsRelativeTo(location, rotation)]):
+        sg = self.puzzle
+        if any(x[0] >= self.height or x[1] >= self.height or sg[x[0]][x[1]] != 1 for x in shape.locationsRelativeTo(location, rotation)):
             return False
         return True
 

@@ -1,7 +1,9 @@
 from copy import deepcopy
-from Board import Board
+from Board import *
 from Shape import *
 from colorama import init as colorInit, Back, Style
+import time
+from PuzzlesAndShapes import *
 
 def boardString(board):
     return ["".join([["  ",". "][x]if x in [0, 1] else x for x in row]) for row in board]
@@ -16,11 +18,13 @@ def initShapes(shapeStringArray):
 def findPotentialSpots(shapes, board):
     potentialspots = []
     for s in shapes:
+        spots = board.findSpots(s)
         potentialspots.append([(spot, s.locationsRelativeTo(
-            spot[1:], spot[0])) for spot in board.findSpots(s)])
+            spot[1:], spot[0])) for spot in spots])
     return potentialspots
 
 def validateSolutionsRecursive(spots, potentialspots, target,solutions):
+    global iteration
     if len(potentialspots) == 0:
         if set(sum([x[1]for x in spots], [])) == target:
             solutions.append([x[0] for x in spots])
@@ -33,15 +37,18 @@ def validateSolutionsRecursive(spots, potentialspots, target,solutions):
             spots + [s], potentialspots[:], target,solutions)
 
 def filterDuplicates(solutions,shapes):
-    duplicates = [(len(shapes)-i-1,len(shapes)-j-1) for i in range(len(shapes)-1) for j in range(i+1,len(shapes)) if str(shapes[i])==str(shapes[j])]
+    shapeLen = len(shapes) - 1
+    duplicates = [(shapeLen-i,shapeLen-j) for i in range(shapeLen) for j in range(i+1,shapeLen+1) if str(shapes[i])==str(shapes[j])]
     result = []
     for sol in solutions:
         valid = True
         for d in duplicates:
             sol2 = sol[:]
-            sol2[d[0]],sol2[d[1]] = sol2[d[1]],sol2[d[0]]
+            a,b = d
+            sol2[a],sol2[b] = sol2[b],sol2[a]
             if tuple(sol2) in result:
                 valid = False
+                break
         if valid:
             result.append(tuple(sol))
     return result
@@ -55,13 +62,13 @@ def printSolutions(solutions,shapes,b):
             b.addShape(shapes[~i], sol[i][1:], sol[i][0])
         bss.append(boardString(b.shapeGrid()))
     print (str(len(solutions))+" solutions found")
-    for row in range(len(bss[0])):
-        print(" ".join(bs[row] for bs in bss))
-    # for bs in bss:
-    #     for bsl in bs:
-    #         print (bsl)
+    if len(solutions)>0:
+        for row in range(len(bss[0])):
+            print(" ".join(bs[row] for bs in bss))
+
 
 def main(shapeStringArray,board):
+    start = time.time()
     colorInit()
     shapes = initShapes(shapeStringArray)
     potentialspots = findPotentialSpots(shapes,board)
@@ -69,58 +76,20 @@ def main(shapeStringArray,board):
     validateSolutionsRecursive([], potentialspots, board.allOpenings,solutions)
     newsols = filterDuplicates(solutions,shapes)
     printSolutions(newsols,shapes,board)
+    print(time.time()-start)
 
 
-b = Board([
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 1, 1, 0, 0],
-    [0, 0, 0, 1, 0, 1, 0, 0],
-    [0, 0, 0, 1, 1, 1, 0, 0],
-    [0, 0, 0, 0, 1, 0, 0, 0],
-    [0, 0, 0, 0, 1, 1, 0, 0],
-    [0, 0, 0, 0, 1, 0, 0, 0],
-    [0, 0, 0, 0, 1, 1, 0, 0]]
+b = boardStringToBoard(
+        # BoardsDict["key"]
+        BoardsDict["arrow"]
 )
-
-shapestrings = ["""
-                000
-                010
-                110
-                -
-                000
-                000
-                100
-                -
-                100
-                010
-                110
-                """,
-                """
-                000
-                010
-                110
-                -
-                000
-                000
-                100
-                -
-                100
-                010
-                110
-                """,
-                """
-                000
-                010
-                111
-                -
-                000
-                000
-                101
-                -
-                000
-                000
-                111
-                """]
+# b = boardStringToBoard(
+# )
+shapestrings = [ShapesDict["jJn"],
+                ShapesDict["jJn"],
+                ShapesDict["tIL"],
+                ShapesDict["brstairs"]
+                ]
 
 main(shapestrings,b)
 
