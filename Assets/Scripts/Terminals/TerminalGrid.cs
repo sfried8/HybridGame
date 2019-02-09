@@ -163,15 +163,14 @@ public class TerminalGrid : MonoBehaviour
 
 			}
 
-			int[][] hoverSection = new int[currentShape.height][];
+			int[, ] hoverSection = new int[currentShape.height, currentShape.width];
 			for (int i = 0; i < currentShape.height; i++)
 			{
-				hoverSection[currentShape.height - i - 1] = new int[currentShape.width];
 				for (int j = 0; j < currentShape.width; j++)
 				{
 					if (i + currentHover.Row >= 1 && i + currentHover.Row <= rowCount && j + currentHover.Col >= 1 && j + currentHover.Col <= colCount)
 					{
-						hoverSection[currentShape.height - i - 1][currentShape.width - j - 1] = grid[i + (currentHover.Row - ((currentShape.height - 1) / 2)), j + (currentHover.Col - ((currentShape.width - 1) / 2))];
+						hoverSection[currentShape.height - i - 1, currentShape.width - j - 1] = grid[i + (currentHover.Row - ((currentShape.height - 1) / 2)), j + (currentHover.Col - ((currentShape.width - 1) / 2))];
 					}
 				}
 			}
@@ -353,8 +352,7 @@ public class TerminalGrid : MonoBehaviour
 		{
 			Vector3 pos = Input.mousePosition;
 			pos.z = currentShape.gameObject.transform.position.z - Camera.allCameras[1].transform.position.z;
-			Debug.Log (pos);
-			currentShape.DragToPosition (Camera.allCameras[1].ScreenToWorldPoint (pos + new Vector3 (1, 1, 0))) /* + Camera.allCameras[1].ScreenToWorldPoint (clickedVoxel)*/ ;
+			currentShape.DragToPosition (Camera.allCameras[1].ScreenToWorldPoint (pos)) /* + Camera.allCameras[1].ScreenToWorldPoint (clickedVoxel)*/ ;
 
 			// currentShape.targetPosition = currentShape.gameObject.transform.localPosition;
 		}

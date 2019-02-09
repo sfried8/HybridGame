@@ -7,8 +7,8 @@ public class ShapeData : ScriptableObject
 {
     [TextArea (11, 11)]
     public string ShapeString;
-    private int[][][] grid;
-    public int[][][] Grid
+    private int[, , ] grid;
+    public int[, , ] Grid
     {
         get
         {
