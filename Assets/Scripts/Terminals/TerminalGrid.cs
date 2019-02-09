@@ -29,6 +29,7 @@ public class TerminalGrid : MonoBehaviour
 	public bool isActive = false;
 	private bool wasIncomplete = true;
 
+	public Vector3 clickedVoxel;
 	public void OnActivated ()
 	{
 		isActive = true;
@@ -162,15 +163,15 @@ public class TerminalGrid : MonoBehaviour
 
 			}
 
-			int[][] hoverSection = new int[3][];
-			for (int i = 0; i < 3; i++)
+			int[][] hoverSection = new int[currentShape.height][];
+			for (int i = 0; i < currentShape.height; i++)
 			{
-				hoverSection[2 - i] = new int[3];
-				for (int j = 0; j < 3; j++)
+				hoverSection[currentShape.height - i - 1] = new int[currentShape.width];
+				for (int j = 0; j < currentShape.width; j++)
 				{
 					if (i + currentHover.Row >= 1 && i + currentHover.Row <= rowCount && j + currentHover.Col >= 1 && j + currentHover.Col <= colCount)
 					{
-						hoverSection[2 - i][2 - j] = grid[i + (currentHover.Row - 1), j + (currentHover.Col - 1)];
+						hoverSection[currentShape.height - i - 1][currentShape.width - j - 1] = grid[i + (currentHover.Row - ((currentShape.height - 1) / 2)), j + (currentHover.Col - ((currentShape.width - 1) / 2))];
 					}
 				}
 			}
@@ -315,6 +316,8 @@ public class TerminalGrid : MonoBehaviour
 				Shape clickedShape = hit.transform.parent.GetComponent<Shape> ();
 				if (clickedShape != null)
 				{
+					clickedVoxel = hit.transform.localPosition;
+					clickedVoxel.z = 0;
 					if (currentShape != null)
 					{
 						// currentShape.gameObject.transform.localScale = new Vector3 (0.9f, 0.9f, 0.9f);
@@ -350,7 +353,8 @@ public class TerminalGrid : MonoBehaviour
 		{
 			Vector3 pos = Input.mousePosition;
 			pos.z = currentShape.gameObject.transform.position.z - Camera.allCameras[1].transform.position.z;
-			currentShape.gameObject.transform.parent.position = Camera.allCameras[1].ScreenToWorldPoint (pos);
+			Debug.Log (pos);
+			currentShape.DragToPosition (Camera.allCameras[1].ScreenToWorldPoint (pos + new Vector3 (1, 1, 0))) /* + Camera.allCameras[1].ScreenToWorldPoint (clickedVoxel)*/ ;
 
 			// currentShape.targetPosition = currentShape.gameObject.transform.localPosition;
 		}

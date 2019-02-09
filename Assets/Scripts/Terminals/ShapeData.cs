@@ -14,7 +14,7 @@ public class ShapeData : ScriptableObject
         {
             if (grid == null)
             {
-                grid = Util.Create3DIntArrayFromString (ShapeString, 3, 3, 3);
+                grid = Util.Create3DIntArrayFromString (ShapeString);
             }
             return grid;
         }

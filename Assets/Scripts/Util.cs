@@ -74,13 +74,13 @@ public class Util
 		return CreateNulled3DGameObjectArray (basedOn[0][0].Length, basedOn[0].Length, basedOn.Length);
 	}
 
-	public static int[][] Create2DIntArrayFromString (string source, int height, int width)
+	public static int[][] Create2DIntArrayFromString (string source)
 	{
-		int[][] ret = CreateZeroed2DIntArray (width, height);
 		char[][] rows = source.Split (new char[] { '\n' }).Select ((r) => r.Trim ().ToCharArray ()).ToArray ();
-		for (int i = 0; i < height; i++)
+		int[][] ret = CreateZeroed2DIntArray (rows[0].Length, rows.Length);
+		for (int i = 0; i < rows.Length; i++)
 		{
-			for (int j = 0; j < width; j++)
+			for (int j = 0; j < rows[i].Length; j++)
 			{
 				ret[i][j] = int.Parse (rows[i][j].ToString ());
 			}
@@ -88,13 +88,15 @@ public class Util
 		return ret;
 	}
 
-	public static int[][][] Create3DIntArrayFromString (string source, int depth, int width, int height)
+	public static int[][][] Create3DIntArrayFromString (string source)
 	{
-		int[][][] ret = CreateZeroed3DIntArray (width, height, depth);
+
 		string[] planes = source.Split (new string[] { "\n\r\n", "\n\n", "||" }, System.StringSplitOptions.None);
+		int depth = planes.Length;
+		int[][][] ret = new int[depth][][];
 		for (int i = 0; i < depth; i++)
 		{
-			ret[i] = Create2DIntArrayFromString (planes[i], height, width);
+			ret[i] = Create2DIntArrayFromString (planes[i]);
 		}
 		return ret;
 	}

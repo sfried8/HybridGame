@@ -18,6 +18,9 @@ public class Shape : MonoBehaviour
     public GameObject[][][] Voxels;
     public Point location;
 
+    public int width;
+    public int height;
+    public int depth;
     private bool _freezeRotation = false;
     public bool FreezeRotation
     {
@@ -31,54 +34,55 @@ public class Shape : MonoBehaviour
     public List<Point> GetTileLocations (Point _location)
     {
         updateRendererFace ();
-        int[][] face = Face ();
+        List<List<int>> face = Face ();
         List<Point> ret = new List<Point> ();
-        for (int row = 0; row < face.Length; row++)
+        for (int row = 0; row < face.Count; row++)
         {
-            for (int col = 0; col < face[0].Length; col++)
+
+            for (int col = 0; col < face[0].Count; col++)
             {
                 if (face[row][col] == 1)
                 {
-                    ret.Add (Point.GridCoord (row + _location.Row - 1, col + _location.Col - 1));
+                    ret.Add (Point.GridCoord (row + _location.Row - ((grid[0].Length - 1) / 2), col + _location.Col - ((grid[0][0].Length - 1) / 2)));
                 }
             }
         }
         return ret;
     }
 
-    private List<GameObject>[][] rendererFace;
+    private List<List<List<GameObject>>> rendererFace;
     private void updateRendererFace ()
     {
-        rendererFace = new List<GameObject>[grid[0].Length][];
+        rendererFace = new List<List<List<GameObject>>> ();
 
-        for (int plane = 0; plane < grid.Length; plane++)
+        for (int row = 0; row < grid[0].Length; row++)
         {
-            for (int row = 0; row < grid[0].Length; row++)
+            rendererFace.Add (new List<List<GameObject>> ());
+            for (int col = 0; col < grid[0][0].Length; col++)
             {
-                rendererFace[row] = new List<GameObject>[grid[0][0].Length];
-                for (int col = 0; col < grid[0][0].Length; col++)
+                rendererFace[row].Add (new List<GameObject> ());
+                for (int plane = 0; plane < grid.Length; plane++)
                 {
                     if (grid[plane][row][col] == 1)
                     {
-                        if (rendererFace[row][col] == null)
-                        {
-                            rendererFace[row][col] = new List<GameObject> ();
-                        }
                         rendererFace[row][col].Add (Voxels[plane][row][col]);
                     }
                 }
 
             }
         }
+
     }
-    public int[][] Face ()
+    public List<List<int>> Face ()
     {
-        int[][] ret = Util.CreateZeroed2DIntArray (grid[0][0].Length, grid[0].Length);
-        for (int plane = 0; plane < grid.Length; plane++)
+        List<List<int>> ret = new List<List<int>> ();
+        for (int row = 0; row < grid[0].Length; row++)
         {
-            for (int row = 0; row < grid[0].Length; row++)
+            ret.Add (new List<int> ());
+            for (int col = 0; col < grid[0][0].Length; col++)
             {
-                for (int col = 0; col < grid[0][0].Length; col++)
+                ret[row].Add (0);
+                for (int plane = 0; plane < grid.Length; plane++)
                 {
                     if (grid[plane][row][col] == 1)
                     {
@@ -86,6 +90,56 @@ public class Shape : MonoBehaviour
                     }
                 }
 
+            }
+        }
+        while (ret.Count > 0 && !ret[0].Contains (1))
+        {
+            ret.RemoveAt (0);
+        }
+        while (ret.Count > 0 && !ret[ret.Count - 1].Contains (1))
+        {
+            ret.RemoveAt (ret.Count - 1);
+        }
+        if (ret.Count == 0)
+        {
+            return ret;
+        }
+        while (ret[0].Count > 0)
+        {
+            bool anyAreOne = false;
+            foreach (List<int> row in ret)
+            {
+                if (row[0] == 1)
+                {
+                    anyAreOne = true;
+                }
+            }
+            if (anyAreOne)
+            {
+                break;
+            }
+            foreach (List<int> row in ret)
+            {
+                row.RemoveAt (0);
+            }
+        }
+        while (ret[0].Count > 0)
+        {
+            bool anyAreOne = false;
+            foreach (List<int> row in ret)
+            {
+                if (row[row.Count - 1] == 1)
+                {
+                    anyAreOne = true;
+                }
+            }
+            if (anyAreOne)
+            {
+                break;
+            }
+            foreach (List<int> row in ret)
+            {
+                row.RemoveAt (row.Count - 1);
             }
         }
         return ret;
@@ -127,7 +181,7 @@ public class Shape : MonoBehaviour
                 {
                     if (Voxels[plane][row][col] != null)
                     {
-                        if (slots[2 - row][2 - col] == 1)
+                        if (slots[height - row - 1][width - col - 1] == 1)
                         {
                             // Voxels[plane][row][col].GetComponent<Renderer> ().materials.color = greenColor;
                             Voxels[plane][row][col].GetComponent<Renderer> ().materials = new Material[1] { materialGreen };
@@ -169,13 +223,13 @@ public class Shape : MonoBehaviour
                     {
                         if (reverse)
                         {
-                            newGrid[plane][row][col] = grid[plane][2 - col][row];
-                            newVoxels[plane][row][col] = Voxels[plane][2 - col][row];
+                            newGrid[plane][row][col] = grid[plane][width - col - 1][row];
+                            newVoxels[plane][row][col] = Voxels[plane][width - col - 1][row];
                         }
                         else
                         {
-                            newGrid[plane][2 - col][row] = grid[plane][row][col];
-                            newVoxels[plane][2 - col][row] = Voxels[plane][row][col];
+                            newGrid[plane][width - col - 1][row] = grid[plane][row][col];
+                            newVoxels[plane][width - col - 1][row] = Voxels[plane][row][col];
                         }
                     }
 
@@ -196,13 +250,13 @@ public class Shape : MonoBehaviour
 
                         if (reverse)
                         {
-                            newGrid[plane][row][col] = grid[col][row][2 - plane];
-                            newVoxels[plane][row][col] = Voxels[col][row][2 - plane];
+                            newGrid[plane][row][col] = grid[col][row][depth - plane - 1];
+                            newVoxels[plane][row][col] = Voxels[col][row][depth - plane - 1];
                         }
                         else
                         {
-                            newGrid[col][row][2 - plane] = grid[plane][row][col];
-                            newVoxels[col][row][2 - plane] = Voxels[plane][row][col];
+                            newGrid[col][row][depth - plane - 1] = grid[plane][row][col];
+                            newVoxels[col][row][depth - plane - 1] = Voxels[plane][row][col];
                         }
 
                     }
@@ -225,13 +279,13 @@ public class Shape : MonoBehaviour
 
                         if (reverse)
                         {
-                            newGrid[plane][row][col] = grid[2 - row][plane][col];
-                            newVoxels[plane][row][col] = Voxels[2 - row][plane][col];
+                            newGrid[plane][row][col] = grid[height - row - 1][plane][col];
+                            newVoxels[plane][row][col] = Voxels[height - row - 1][plane][col];
                         }
                         else
                         {
-                            newGrid[2 - row][plane][col] = grid[plane][row][col];
-                            newVoxels[2 - row][plane][col] = Voxels[plane][row][col];
+                            newGrid[height - row - 1][plane][col] = grid[plane][row][col];
+                            newVoxels[height - row - 1][plane][col] = Voxels[plane][row][col];
                         }
 
                     }
@@ -252,8 +306,11 @@ public class Shape : MonoBehaviour
         {
             DestroyImmediate (transform.GetChild (0).gameObject);
         }
-        grid = Util.Create3DIntArrayFromString (gridSource, 3, 3, 3);
-        Voxels = Util.CreateNulled3DGameObjectArray (grid[0][0].Length, grid[0].Length, grid.Length); //, grid[0].Length, grid[0][0].Length];
+        grid = Util.Create3DIntArrayFromString (gridSource);
+        width = grid[0][0].Length;
+        height = grid[0].Length;
+        depth = grid.Length;
+        Voxels = Util.CreateNulled3DGameObjectArray (width, height, depth); //, grid[0].Length, grid[0][0].Length];
         for (int plane = 0; plane < grid.Length; plane++)
         {
             for (int row = 0; row < grid[0].Length; row++)
@@ -264,7 +321,7 @@ public class Shape : MonoBehaviour
                     {
                         GameObject voxel = (GameObject) Instantiate (voxelPrefab);
                         voxel.transform.SetParent (gameObject.transform);
-                        voxel.transform.localPosition = new Vector3 (col - 1, 1 - row, plane - 1);
+                        voxel.transform.localPosition = new Vector3 (col - (width - 1) / 2, (height - 1) / 2 - row, plane - (depth - 1) / 2);
                         voxel.transform.localScale = new Vector3 (0.95f, 0.95f, 0.95f);
                         Voxels[plane][row][col] = voxel;
                         voxel.name = string.Format ("{0},{1},{2}", plane, row, col);
@@ -307,6 +364,18 @@ public class Shape : MonoBehaviour
         if (!FreezePosition)
         {
             transform.parent.localPosition = Vector3.Lerp (transform.parent.localPosition, targetPosition, Time.deltaTime * smooth * 5);
+        }
+    }
+
+    public void DragToPosition (Vector3 point)
+    {
+        transform.parent.position = point;
+    }
+    public Vector3 CenterPoint
+    {
+        get
+        {
+            return transform.parent.localPosition;
         }
     }
 
