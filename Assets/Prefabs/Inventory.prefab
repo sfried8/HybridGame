@@ -57,5 +57,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d6f065e781c11843a64c98d3f420dd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  origin: {x: 0, y: -7, z: 0}
-  verticalSpacing: 2.96
+  origin: {x: -3.78, y: -6.66, z: 0}
+  verticalSpacing: 1.88

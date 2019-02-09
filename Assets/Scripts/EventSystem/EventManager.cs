@@ -3,17 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-    public class EventInfo {
-        public string Description;
-    }
-    public class TerminalPuzzleInfo : EventInfo {
-        public bool completed = true;
-        public Grid terminalGrid;
-    }
+public class EventInfo
+{
+    public string Description;
+}
+public class CollectGoalInfo : EventInfo
+{
+    public int level;
+}
+public class TerminalPuzzleInfo : EventInfo
+{
+    public bool completed = true;
+    public TerminalGrid terminalGrid;
+}
+
 public class EventManager : MonoBehaviour
 {
 
-    public delegate void EventResponse(EventInfo eventInfo);
+    public delegate void EventResponse (EventInfo eventInfo);
 
     public enum EVENT_TYPE
     {
@@ -24,6 +31,8 @@ public class EventManager : MonoBehaviour
         TERMINAL_INCOMPLETE,
         SHAPE_REMOVED,
         HEART_COLLECTED,
+        TERMINAL_BACK_PRESSED,
+        TERMINAL_RESTART_PRESSED
 
     }
     private Dictionary<EVENT_TYPE, List<EventResponse>> eventDictionary;
@@ -37,7 +46,7 @@ public class EventManager : MonoBehaviour
             if (!eventManager)
             {
                 eventManager = FindObjectOfType (typeof (EventManager)) as EventManager;
-
+                DontDestroyOnLoad (eventManager);
                 if (!eventManager)
                 {
                     Debug.LogError ("There needs to be one active EventManger script on a GameObject in your scene.");
@@ -69,7 +78,7 @@ public class EventManager : MonoBehaviour
         }
         else
         {
-            thisEvent = new List<EventResponse>();
+            thisEvent = new List<EventResponse> ();
             thisEvent.Add (listener);
             instance.eventDictionary.Add (eventName, thisEvent);
         }
@@ -84,7 +93,14 @@ public class EventManager : MonoBehaviour
             thisEvent.Remove (listener);
         }
     }
-
+    public static void ClearEvents ()
+    {
+        instance.eventDictionary = new Dictionary<EVENT_TYPE, List<EventResponse>> ();
+    }
+    public void TriggerEvent2 (EVENT_TYPE eventName, EventInfo eventInfo)
+    {
+        TriggerEvent (eventName, eventInfo);
+    }
     public static void TriggerEvent (EVENT_TYPE eventName, EventInfo eventInfo)
     {
         List<EventResponse> thisEvent = null;
@@ -92,7 +108,7 @@ public class EventManager : MonoBehaviour
         {
             foreach (EventResponse er in thisEvent)
             {
-                er(eventInfo);
+                er (eventInfo);
             }
         }
     }

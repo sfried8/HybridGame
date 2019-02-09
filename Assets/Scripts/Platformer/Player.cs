@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
+    [HideInInspector]
     public GameObject inventory;
 
-    public Grid terminalGravityGrid;
+    public TerminalGrid terminalGravityGrid;
     public void CollectCoin (Shape shape)
     {
 
@@ -32,23 +34,28 @@ public class Player : MonoBehaviour
 
     public bool controlsActive = true;
 
-    public void OnTerminalComplete(EventInfo info) {
-        TerminalPuzzleInfo tpi = (TerminalPuzzleInfo)info;
-        if (tpi?.terminalGrid != terminalGravityGrid) {
+    public void OnTerminalComplete (EventInfo info)
+    {
+        TerminalPuzzleInfo tpi = (TerminalPuzzleInfo) info;
+        if (tpi?.terminalGrid != terminalGravityGrid)
+        {
             return;
         }
-        gravity = gravityBase/2;
+        gravity = gravityBase / 2;
     }
 
-        public void OnTerminalIncomplete(EventInfo info) {
-        TerminalPuzzleInfo tpi = (TerminalPuzzleInfo)info;
-        if (tpi?.terminalGrid != terminalGravityGrid) {
+    public void OnTerminalIncomplete (EventInfo info)
+    {
+        TerminalPuzzleInfo tpi = (TerminalPuzzleInfo) info;
+        if (tpi?.terminalGrid != terminalGravityGrid)
+        {
             return;
         }
         gravity = gravityBase;
     }
     void Awake ()
     {
+        inventory = (FindObjectOfType (typeof (Inventory)) as Inventory).gameObject;
         _controller = GetComponent<CharacterController2D> ();
 
         // listen to some events for illustration purposes
@@ -57,10 +64,10 @@ public class Player : MonoBehaviour
         _controller.onTriggerExitEvent += onTriggerExitEvent;
         EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_ACTIVATED, (_) => controlsActive = false);
         EventManager.StartListening (EventManager.EVENT_TYPE.HEART_COLLECTED, (_) => controlsActive = false);
-        EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_DEACTIVATED,(_)=> controlsActive = true);
+        EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_DEACTIVATED, (_) => controlsActive = true);
 
-                EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_COMPLETE, OnTerminalComplete);
-        EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_INCOMPLETE,OnTerminalIncomplete);
+        EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_COMPLETE, OnTerminalComplete);
+        EventManager.StartListening (EventManager.EVENT_TYPE.TERMINAL_INCOMPLETE, OnTerminalIncomplete);
     }
 
     #region Event Listeners
@@ -84,6 +91,14 @@ public class Player : MonoBehaviour
     // the Update loop contains a very simple example of moving the character around and controlling the animation
     void Update ()
     {
+        if (Input.GetKeyDown (KeyCode.R))
+        {
+            StartCoroutine (HoldButtonForSeconds (KeyCode.R, 2f, () => SceneManager.LoadScene (SceneManager.GetActiveScene ().name)));
+        }
+        if (Input.GetKeyDown (KeyCode.Escape))
+        {
+            StartCoroutine (HoldButtonForSeconds (KeyCode.Escape, 2f, () => SceneManager.LoadScene ("MainMenu")));
+        }
         if (controlsActive)
         {
             MoveCharacter ();
@@ -93,7 +108,11 @@ public class Player : MonoBehaviour
     {
         if (_controller.isGrounded)
             _velocity.y = 0;
+        if (_controller.isGrounded && Input.GetKeyDown (KeyCode.Space))
+        {
+            _velocity.y = Mathf.Sqrt (2f * jumpHeight * -gravityBase);
 
+        }
         if (Input.GetKey (KeyCode.D))
         {
             normalizedHorizontalSpeed = 1;
@@ -115,11 +134,6 @@ public class Player : MonoBehaviour
         }
 
         // we can only jump whilst grounded
-        if (_controller.isGrounded && Input.GetKeyDown (KeyCode.Space))
-        {
-            _velocity.y = Mathf.Sqrt (2f * jumpHeight * -gravityBase);
-
-        }
 
         // apply horizontal speed smoothing it. dont really do this with Lerp. Use SmoothDamp or something that provides more control
         var smoothedMovementFactor = _controller.isGrounded ? groundDamping : inAirDamping; // how fast do we change direction?
@@ -140,5 +154,18 @@ public class Player : MonoBehaviour
 
         // grab our current _velocity to use as a base for all calculations
         _velocity = _controller.velocity;
+    }
+    IEnumerator HoldButtonForSeconds (KeyCode key, float seconds, Util.VoidFunction action)
+    {
+        float endTime = Time.time + seconds;
+        while (Time.time <= endTime)
+        {
+            if (!Input.GetKey (key))
+            {
+                yield break;
+            }
+            yield return null;
+        }
+        action ();
     }
 }
