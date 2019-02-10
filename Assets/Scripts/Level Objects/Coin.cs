@@ -56,9 +56,9 @@ public class Coin : MonoBehaviour
 		// shapeInstance.GetComponentInChildren<Shape> ().Regenerate ();
 		shape = GetComponentInChildren<Shape> ();
 		// shapeInstance = shape.transform.parent.gameObject;
-		shape.FreezeRotation = true;
 		shape.gridSource = shapeData.ShapeString;
 		shape.Regenerate ();
+		shape.FreezeRotation = true;
 		gameObject.SetLayerRecursively (LayerMask.NameToLayer ("Default"));
 		this.name = shapeData.name + " Coin";
 	}

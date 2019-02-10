@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+[System.Serializable]
 public class Point : IEquatable<Point>
 {
 
+	[SerializeField]
 	private int x;
 	public int X
 	{
@@ -27,6 +29,8 @@ public class Point : IEquatable<Point>
 			x = value;
 		}
 	}
+
+	[SerializeField]
 	private int y;
 	public int Y
 	{
@@ -50,6 +54,8 @@ public class Point : IEquatable<Point>
 			y = value;
 		}
 	}
+
+	[SerializeField]
 	private int z;
 	public int Z
 	{
@@ -76,6 +82,18 @@ public class Point : IEquatable<Point>
 	public static Point GridCoord (int row, int col)
 	{
 		return new Point (col, row);
+	}
+	public static Point ZERO ()
+	{
+		return new Point (0, 0, 0);
+	}
+	public static Point ONE ()
+	{
+		return new Point (1, 1, 1);
+	}
+	public static Point FromVector3 (Vector3 source)
+	{
+		return new Point ((int) source.x, (int) source.y, (int) source.z);
 	}
 	public Point (int x, int y, int z)
 	{

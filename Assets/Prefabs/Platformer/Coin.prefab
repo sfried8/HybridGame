@@ -106,14 +106,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3f3723e5a1161c40b1a50f9ac20e8ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  materialGreen: {fileID: 2100000, guid: e47466427a95dd645a5e66092b7bd907, type: 2}
+  materialRed: {fileID: 2100000, guid: 46bddf384747617469e9dc7f04b3baed, type: 2}
   voxelPrefab: {fileID: 1000011740021034, guid: 90c7a1edcb5428a4a8b9fe551c2df5c4,
     type: 3}
+  shapeGameObject: {fileID: 0}
   gridSource: 
-  materialRed: {fileID: 2100000, guid: 46bddf384747617469e9dc7f04b3baed, type: 2}
-  materialGreen: {fileID: 2100000, guid: e47466427a95dd645a5e66092b7bd907, type: 2}
-  materialWhite: {fileID: 2100000, guid: 0e62f06c731aee74dbb5860432f01543, type: 2}
+  width: 0
+  height: 1
+  depth: 1
   targetPosition: {x: 0, y: 0, z: 0}
-  quaternion: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &8374794446760870972
 GameObject:
   m_ObjectHideFlags: 0

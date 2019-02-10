@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using static Shape;
-
+using static Util;
 public class GridInputManager : MonoBehaviour
 {
 

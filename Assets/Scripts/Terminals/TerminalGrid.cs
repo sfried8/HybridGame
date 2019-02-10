@@ -163,14 +163,21 @@ public class TerminalGrid : MonoBehaviour
 
 			}
 
-			int[, ] hoverSection = new int[currentShape.height, currentShape.width];
-			for (int i = 0; i < currentShape.height; i++)
+			// int height = currentShape.FaceHeight ();
+			// int width = currentShape.FaceWidth ();
+			int height = currentShape.height;
+			int width = currentShape.width;
+			int[, ] hoverSection = new int[height, width];
+			for (int i = 0; i < height; i++)
 			{
-				for (int j = 0; j < currentShape.width; j++)
+				for (int j = 0; j < width; j++)
 				{
 					if (i + currentHover.Row >= 1 && i + currentHover.Row <= rowCount && j + currentHover.Col >= 1 && j + currentHover.Col <= colCount)
 					{
-						hoverSection[currentShape.height - i - 1, currentShape.width - j - 1] = grid[i + (currentHover.Row - ((currentShape.height - 1) / 2)), j + (currentHover.Col - ((currentShape.width - 1) / 2))];
+						int hsy = height - i - 1;
+						int hsx = width - j - 1;
+
+						hoverSection[hsy, hsx] = grid[i + currentHover.Row - currentShape.CenterPoint.Y + currentShape.OffsetPoint.Y, j + currentHover.Col - currentShape.CenterPoint.X + currentShape.OffsetPoint.X];
 					}
 				}
 			}
