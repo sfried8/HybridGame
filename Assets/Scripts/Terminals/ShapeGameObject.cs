@@ -81,11 +81,6 @@ public class ShapeGameObject : MonoBehaviour
         shape.isOddY = (geometricCenter.y - Math.Truncate (geometricCenter.y) >= 0.4f);
 
         shape.OffsetPoint = geometricCenter.ToPoint ();
-        Debug.Log (geometricCenter);
-        Debug.Log (shape.OffsetPoint.ToVector3 ());
-
-        // float x = 1.1f * shape.OffsetPoint.X;
-        // float y = -1.1f * shape.OffsetPoint.Y;
 
         targetOffsetPosition = Vector3.Scale (new Vector3 (1.0f, -1.0f, 0), shape.CenterPoint.ToVector3 () - geometricCenter);
     }
@@ -163,8 +158,8 @@ public class ShapeGameObject : MonoBehaviour
     void Start ()
     {
         positionDebugState = this.CreateStateObject (3, KeyCode.Y);
-        DebugPanel.StartChecking ("targetOffsetPosition", () => targetOffsetPosition.ToString ());
-        DebugPanel.StartChecking ("centerPoint", () => shape?.CenterPoint?.ToVector3 ().ToString ());
+        // DebugPanel.StartChecking ("targetOffsetPosition", () => targetOffsetPosition.ToString ());
+        // DebugPanel.StartChecking ("centerPoint", () => shape?.CenterPoint?.ToVector3 ().ToString ());
     }
     void Update ()
     {

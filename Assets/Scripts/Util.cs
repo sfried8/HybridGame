@@ -220,5 +220,9 @@ public class Util
 		return new Vector3 (marginX + trimmedCenterX, marginY + trimmedCenterY, 0);
 
 	}
+	public static bool IsInRange (int x, int lowInclusive, int highExclusive)
+	{
+		return x >= lowInclusive && x < highExclusive;
+	}
 
 }

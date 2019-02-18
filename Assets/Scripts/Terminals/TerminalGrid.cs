@@ -180,16 +180,18 @@ public class TerminalGrid : MonoBehaviour
 
 			}
 
-			// int height = currentShape.FaceHeight ();
-			// int width = currentShape.FaceWidth ();
-			int height = currentShape.height;
-			int width = currentShape.width;
+			int height = currentShape.FaceHeight ();
+			int width = currentShape.FaceWidth ();
+			// int height = currentShape.height;
+			// int width = currentShape.width;
 			int[, ] hoverSection = new int[height, width];
 			for (int i = 0; i < height; i++)
 			{
 				for (int j = 0; j < width; j++)
 				{
-					if (i + currentHover.Row >= 1 && i + currentHover.Row <= rowCount && j + currentHover.Col >= 1 && j + currentHover.Col <= colCount)
+					if (Util.IsInRange (i + currentHover.Row - currentShape.OffsetPoint.Y, 0, rowCount) &&
+						Util.IsInRange (j + currentHover.Col - currentShape.OffsetPoint.X, 0, colCount))
+					// if (i + currentHover.Row >= currentShape.OffsetPoint.Y && i + currentHover.Row - currentShape.OffsetPoint.Y < rowCount && j + currentHover.Col >= currentShape.OffsetPoint.X && j + currentHover.Col - currentShape.OffsetPoint.X < colCount)
 					{
 						int hsy = height - i - 1;
 						int hsx = width - j - 1;

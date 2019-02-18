@@ -21,7 +21,6 @@ public class DebugState : MonoBehaviour
         if (!initialized)
         {
             initialized = true;
-            DebugPanel.StartChecking ("State", () => (State + 1) + "/" + numStates);
         }
         if (Input.GetKeyDown (toggleKey))
         {
