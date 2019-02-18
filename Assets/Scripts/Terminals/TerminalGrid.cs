@@ -8,53 +8,30 @@ using UnityEngine.UI;
 public class TerminalGrid : MonoBehaviour
 {
 	public GameObject buttonPrefab;
-	private RectTransform panel;
 	public Shape currentShape;
 	private List<Shape> placedShapes = new List<Shape> ();
 
-	private Dictionary<Point, Shape> occupiedTiles = new Dictionary<Point, Shape> ();
-	private Color[] colors = { Color.white, new Color (0.75f, 0.75f, 0.75f), Color.red };
+	public Dictionary<Point, Shape> occupiedTiles = new Dictionary<Point, Shape> ();
 	public Point currentHover = null;
 
 	public List<GridPuzzle> puzzles = new List<GridPuzzle> ();
 	private int puzzleIndex = 0;
-	private int[, ] grid;
+	public int[, ] grid;
 
 	private HashSet<Point> slots = new HashSet<Point> ();
-	private GameObject[, ] buttons;
 	// Use this for initialization
 
-	private int rowCount;
-	private int colCount;
+	public int rowCount;
+	public int colCount;
 	public bool isActive = false;
 	private bool wasIncomplete = true;
 
-	public Vector3 clickedVoxel;
-
-	private float panelLeft;
-	private float panelWidth;
-	private float panelTop;
-	private float panelHeight;
+	private TerminalGridUIManager terminalUI;
 	public void OnActivated ()
 	{
 		isActive = true;
-		for (int row = 0; row < rowCount; row++)
-		{
-			for (int col = 0; col < colCount; col++)
-			{
-				buttons[row, col].SetActive (true);
-			}
-		}
+		terminalUI.OnActivated ();
 		RefreshGrid ();
-		Vector3[] corners = new Vector3[4];
-		panel.GetWorldCorners (corners);
-		Vector3 bottomLeft = Camera.allCameras[1].WorldToScreenPoint (corners[0]);
-		Vector3 topRight = Camera.allCameras[1].WorldToScreenPoint (corners[2]);
-		panelLeft = bottomLeft.x;
-		panelWidth = topRight.x - panelLeft;
-		panelTop = topRight.y;
-		panelHeight = bottomLeft.y - panelTop;
-
 	}
 	public void OnDeactivated ()
 	{
@@ -64,168 +41,109 @@ public class TerminalGrid : MonoBehaviour
 			ReturnToInventory ();
 
 		}
+		terminalUI.OnDeactivated ();
 		ButtonHoverExit ();
-		for (int row = 0; row < rowCount; row++)
-		{
-			for (int col = 0; col < colCount; col++)
-			{
-				buttons[row, col].SetActive (false);
-			}
-		}
 	}
 	void Start ()
 	{
-		panel = GameObject.FindGameObjectsWithTag ("GridPanel") [0].GetComponent<RectTransform> ();
 		grid = puzzles[puzzleIndex].Grid;
 		rowCount = grid.GetLength (0);
 		colCount = grid.GetLength (1);
-		buttons = new GameObject[rowCount, colCount];
 		// CreateNewShape ();
 		for (int row = 0; row < rowCount; row++)
 		{
 			for (int col = 0; col < colCount; col++)
 			{
 
-				GameObject buttonGameObject = (GameObject) Instantiate (buttonPrefab);
-				buttonGameObject.transform.SetParent (panel, false);
-				int newRow = row;
-				int newCol = col;
-				EventTrigger eventTrigger = buttonGameObject.GetComponent<EventTrigger> ();
-				EventTrigger.Entry eventEntry = new EventTrigger.Entry ();
-				eventEntry.eventID = EventTriggerType.PointerEnter;
-				// eventEntry.callback.AddListener ((data) => ButtonHover (newRow, newCol));
-				eventTrigger.triggers.Add (eventEntry);
-				EventTrigger.Entry eventExit = new EventTrigger.Entry ();
-				eventExit.eventID = EventTriggerType.PointerExit;
-				// eventExit.callback.AddListener ((data) => ButtonHoverExit ());
-				eventTrigger.triggers.Add (eventExit);
-				buttons[row, col] = buttonGameObject;
-				buttonGameObject.SetActive (false);
 				if (grid[row, col] == 1)
 				{
 					slots.Add (Point.GridCoord (row, col));
 				}
 			}
 		}
-
+		terminalUI = gameObject.AddComponent<TerminalGridUIManager> ();
+		terminalUI.buttonPrefab = buttonPrefab;
 		RefreshGrid ();
-		hoverState = this.CreateStateObject (2, KeyCode.U);
 		currentHover = null;
 	}
-	void ButtonHover (int row, int col)
+
+	public void ButtonHover (int row, int col)
 	{
 		if (!isActive)
 		{
 			return;
 		}
-		currentHover = Point.GridCoord (Mathf.Clamp (row, 1, 6), Mathf.Clamp (col, 1, 6));
+		if (currentHover == null || currentHover.Row != row || currentHover.Col != col)
+		{
 
-		RefreshGrid ();
+			currentHover = Point.GridCoord (row, col);
+
+			RefreshGrid ();
+		}
 
 	}
-	void ButtonHoverExit ()
+	public void ButtonHoverExit ()
 	{
+		if (currentHover == null)
+		{
+			return;
+		}
 		currentHover = null;
 		currentShape?.ClearColorVoxels ();
 		RefreshGrid ();
 	}
-	private DebugState hoverState;
+	public List<Point> GetHoverTiles ()
+	{
+		if (currentShape == null || currentHover == null)
+		{
+			return null;
+		}
+		return currentShape.GetTileLocations (currentHover);
+	}
+	public void ColorCurrentShapeVoxels ()
+	{
+		// int height = currentShape.FaceHeight ();
+		// int width = currentShape.FaceWidth ();
+		int height = currentShape.height;
+		int width = currentShape.width;
+		int[, ] hoverSection = new int[height, width];
+		for (int i = 0; i < height; i++)
+		{
+			for (int j = 0; j < width; j++)
+			{
+				if (Util.IsInRange (i + currentHover.Row - currentShape.OffsetPoint.Y, 0, rowCount) &&
+					Util.IsInRange (j + currentHover.Col - currentShape.OffsetPoint.X, 0, colCount))
+				{
+					int hsy = height - i - 1;
+					int hsx = width - j - 1;
+
+					hoverSection[hsy, hsx] = grid[i + currentHover.Row - currentShape.OffsetPoint.Y, j + currentHover.Col - currentShape.OffsetPoint.X];
+
+				}
+			}
+		}
+		currentShape.ColorVoxels (hoverSection);
+	}
+	public List<Point> GetHoverShapeTileLocations ()
+	{
+		if (currentShape == null && currentHover != null)
+		{
+			if (occupiedTiles.ContainsKey (currentHover))
+			{
+				Shape hoverShape = occupiedTiles[currentHover];
+				return hoverShape.GetTileLocations (hoverShape.location);
+			}
+		}
+		return null;
+	}
 	public void RefreshGrid ()
 	{
 		if (!isActive)
 		{
 			return;
 		}
-		for (int row = 0; row < rowCount; row++)
-		{
-			for (int col = 0; col < colCount; col++)
-			{
-				Image buttonImage = buttons[row, col].GetComponent<Image> ();
-				buttonImage.color = colors[grid[row, col]];
 
-			}
-		}
-
-		foreach (Point placedTile in occupiedTiles.Keys)
-		{
-			Image buttonImage = buttons[placedTile.Row, placedTile.Col].GetComponent<Image> ();
-			if (grid[placedTile.Row, placedTile.Col] != 0)
-			{
-				buttonImage.color = new Color (0.4f, 1.0f, 0.4f);
-			}
-			else
-			{
-				buttonImage.color = Color.red;
-			}
-		}
-
-		if (currentShape != null && currentHover != null)
-		{
-			List<Point> hoverTiles = currentShape.GetTileLocations (currentHover);
-			foreach (Point hoverTile in hoverTiles)
-			{
-				if (hoverTile.Row >= 0 && hoverTile.Row < 8 && hoverTile.Col >= 0 && hoverTile.Col < 8)
-				{
-
-					Image buttonImage = buttons[hoverTile.Row, hoverTile.Col].GetComponent<Image> ();
-					if (grid[hoverTile.Row, hoverTile.Col] == 1)
-					{
-						buttonImage.color = new Color (buttonImage.color.r * 0.5f, buttonImage.color.g, buttonImage.color.b * 0.5f);
-					}
-					else
-					{
-						buttonImage.color = new Color (buttonImage.color.r, buttonImage.color.g * 0.5f, buttonImage.color.b * 0.5f);
-					}
-				}
-
-			}
-
-			int height = currentShape.FaceHeight ();
-			int width = currentShape.FaceWidth ();
-			// int height = currentShape.height;
-			// int width = currentShape.width;
-			int[, ] hoverSection = new int[height, width];
-			for (int i = 0; i < height; i++)
-			{
-				for (int j = 0; j < width; j++)
-				{
-					if (Util.IsInRange (i + currentHover.Row - currentShape.OffsetPoint.Y, 0, rowCount) &&
-						Util.IsInRange (j + currentHover.Col - currentShape.OffsetPoint.X, 0, colCount))
-					// if (i + currentHover.Row >= currentShape.OffsetPoint.Y && i + currentHover.Row - currentShape.OffsetPoint.Y < rowCount && j + currentHover.Col >= currentShape.OffsetPoint.X && j + currentHover.Col - currentShape.OffsetPoint.X < colCount)
-					{
-						int hsy = height - i - 1;
-						int hsx = width - j - 1;
-
-						hoverSection[hsy, hsx] = grid[i + currentHover.Row - currentShape.OffsetPoint.Y, j + currentHover.Col - currentShape.OffsetPoint.X];
-
-					}
-				}
-			}
-			currentShape.ColorVoxels (hoverSection);
-		}
-		if (currentShape == null && currentHover != null)
-		{
-			if (occupiedTiles.ContainsKey (currentHover))
-			{
-				Shape hoverShape = occupiedTiles[currentHover];
-				foreach (Point p in hoverShape.GetTileLocations (hoverShape.location))
-				{
-					if (p.Row >= 0 && p.Row < 8 && p.Col >= 0 && p.Col < 8)
-					{
-
-						Image buttonImage = buttons[p.Row, p.Col].GetComponent<Image> ();
-						if (grid[p.Row, p.Col] == 1)
-						{
-							buttonImage.color = new Color (buttonImage.color.r * 0.25f, buttonImage.color.g * 0.5f, buttonImage.color.b * 0.25f);
-						}
-						else
-						{
-							buttonImage.color = new Color (buttonImage.color.r * 0.5f, buttonImage.color.g * 0.25f, buttonImage.color.b * 0.25f);
-						}
-					}
-				}
-			}
-		}
+		terminalUI.RefreshGrid ();
 
 	}
 	bool CheckIsComplete ()
@@ -335,73 +253,6 @@ public class TerminalGrid : MonoBehaviour
 	}
 	public void GetClickTarget ()
 	{
-		RaycastHit hit;
-		Ray ray = Camera.allCameras[1].ScreenPointToRay (Input.mousePosition);
-		if (Physics.Raycast (ray, out hit))
-			if (hit.transform != null)
-			{
-				Shape clickedShape = hit.transform.parent.GetComponent<Shape> ();
-				if (clickedShape != null)
-				{
-					clickedVoxel = hit.transform.localPosition;
-					clickedVoxel.z = 0;
-					if (currentShape != null)
-					{
-						// currentShape.gameObject.transform.localScale = new Vector3 (0.9f, 0.9f, 0.9f);
-					}
-					SetCurrentShape (clickedShape);
-					// 
-				}
-			}
-	}
-
-	// Update is called once per frame
-	static bool mouseActive = true;
-
-	void calculateButtonHoverFromMousePosition (bool isOddX, bool isOddY)
-	{
-		Vector3 pos = Input.mousePosition;
-		Vector3 relativeMousePosition = mousePositionToButtonPosition (pos, isOddX, isOddY);
-		if (relativeMousePosition.x < 0 || relativeMousePosition.x > 8 || relativeMousePosition.y < 0 || relativeMousePosition.y > 8)
-		{
-			if (currentHover != null)
-			{
-				ButtonHoverExit ();
-			}
-		}
-		else
-		{
-			int row = (int) relativeMousePosition.y;
-			int col = (int) relativeMousePosition.x;
-			if (currentHover == null || currentHover.Row != row || currentHover.Col != col)
-			{
-				ButtonHover (row, col);
-			}
-		}
-	}
-	private Vector3 mousePositionToButtonPosition (Vector3 mousePosition, bool isOddX, bool isOddY)
-	{
-		float xPercent = ((mousePosition.x - panelLeft + (isOddX ? -22.5f : 0)) / panelWidth);
-		float yPercent = ((mousePosition.y - panelTop + (isOddY ? 22.5f : 0)) / panelHeight);
-		return new Vector3 (xPercent * 8.0f, yPercent * 8.0f, 0);
-	}
-	void Update ()
-	{
-		if (isActive)
-		{
-			calculateButtonHoverFromMousePosition (currentShape?.isOddX??false, currentShape?.isOddY??false);
-
-			if (mouseActive && currentShape != null && !Input.GetMouseButton (1))
-			{
-				Vector3 pos = Input.mousePosition;
-				// Debug.Log (mousePositionToButtonPosition (pos));
-
-				pos.z = 10; //currentShape.gameObject.transform.position.z - Camera.allCameras[1].transform.position.z;
-				currentShape.DragToPosition (Camera.allCameras[1].ScreenToWorldPoint (pos)) /* + Camera.allCameras[1].ScreenToWorldPoint (clickedVoxel)*/ ;
-
-				// currentShape.targetPosition = currentShape.gameObject.transform.localPosition;
-			}
-		}
-
+		terminalUI.GetClickTarget ();
 	}
 }
