@@ -91,7 +91,7 @@ public class Point : IEquatable<Point>
 	{
 		return new Point (1, 1, 1);
 	}
-	public Vector3 toVector3 ()
+	public Vector3 ToVector3 ()
 	{
 		return new Vector3 (x, y, z);
 	}

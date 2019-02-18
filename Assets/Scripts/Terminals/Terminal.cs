@@ -73,6 +73,7 @@ public class Terminal : MonoBehaviour
 	void ToggleActive (bool activate)
 	{
 
+		terminalCamera.gameObject.SetActive (activate);
 		if (activate && !grid.isActive)
 		{
 			grid.OnActivated ();
@@ -84,7 +85,6 @@ public class Terminal : MonoBehaviour
 			grid.OnDeactivated ();
 			EventManager.TriggerEvent (EventManager.EVENT_TYPE.TERMINAL_DEACTIVATED, null);
 		}
-		terminalCamera.gameObject.SetActive (activate);
 	}
 	void Update ()
 	{

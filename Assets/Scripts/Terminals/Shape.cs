@@ -60,10 +60,16 @@ public class Shape : MonoBehaviour
     public bool FreezeRotation { get => shapeGameObject.FreezeRotation; set => shapeGameObject.FreezeRotation = value; }
     public bool FreezePosition { get => shapeGameObject.FreezePosition; set => shapeGameObject.FreezePosition = value; }
     public Point CenterPoint { get { if (_centerPoint == null) { _centerPoint = Point.ONE (); } return _centerPoint; } set => _centerPoint = value; }
+
+    [SerializeField]
     private Point offsetPoint;
     public Vector3 targetPosition { get => shapeGameObject.targetPosition; set => shapeGameObject.targetPosition = value; }
     public Point OffsetPoint { get => offsetPoint; set => offsetPoint = value; }
 
+    public float buttonGridXOffset;
+    public float buttonGridYOffset;
+    public bool isOddX;
+    public bool isOddY;
     public List<Point> GetTileLocations (Point _location)
     {
         int[, ] face = Face ();
@@ -75,7 +81,7 @@ public class Shape : MonoBehaviour
             {
                 if (face[row, col] == 1)
                 {
-                    ret.Add (Point.GridCoord (row + _location.Row - CenterPoint.Y + OffsetPoint.Y, col + _location.Col - CenterPoint.X + OffsetPoint.X));
+                    ret.Add (Point.GridCoord (row + _location.Row - OffsetPoint.Y, col + _location.Col - OffsetPoint.X));
                 }
             }
         }
@@ -125,6 +131,7 @@ public class Shape : MonoBehaviour
         grid = Util.Create3DIntArrayFromString (gridSource);
         CenterPoint = new Point ((width - 1) / 2, (height - 1) / 2, (depth - 1) / 2);
         shapeGameObject.Regenerate ();
+        OffsetPoint = Util.GeometricCenter (Face ()).ToPoint ();
     }
     public void DragToPosition (Vector3 point)
     {

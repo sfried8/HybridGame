@@ -1,0 +1,580 @@
+{
+    "extension": "linecount",
+    "version": "0.1.7",
+    "workspace": "d:\\Documents\\New Unity Project 2",
+    "linecount": [
+        {
+            "version": "0.1.7",
+            "counttime": "2019-02-17 22:58:06",
+            "filesum": 89,
+            "codesum": 5836,
+            "commentsum": 312,
+            "blanksum": 519,
+            "filelist": [
+                {
+                    "blank": 7,
+                    "code": 60,
+                    "comment": 0,
+                    "filename": ".gitattributes"
+                },
+                {
+                    "blank": 1,
+                    "code": 711,
+                    "comment": 0,
+                    "filename": "Assembly-CSharp-Editor-firstpass.csproj"
+                },
+                {
+                    "blank": 1,
+                    "code": 715,
+                    "comment": 0,
+                    "filename": "Assembly-CSharp-Editor.csproj"
+                },
+                {
+                    "blank": 1,
+                    "code": 688,
+                    "comment": 0,
+                    "filename": "Assembly-CSharp.csproj"
+                },
+                {
+                    "blank": 4,
+                    "code": 14,
+                    "comment": 1,
+                    "filename": "Assets\\Editor\\PlatformerControllerEditor.cs"
+                },
+                {
+                    "blank": 3,
+                    "code": 13,
+                    "comment": 0,
+                    "filename": "Assets\\Editor\\WorldLayoutGroupEditor.cs"
+                },
+                {
+                    "filename": "Assets\\Fonts\\Intro.otf",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 33,
+                    "code": 165,
+                    "comment": 12,
+                    "filename": "Assets\\Materials\\Blur.shader"
+                },
+                {
+                    "blank": 0,
+                    "code": 2,
+                    "comment": 0,
+                    "filename": "Assets\\Plugins\\GitHub\\Editor\\credits.txt"
+                },
+                {
+                    "blank": 10,
+                    "code": 24,
+                    "comment": 0,
+                    "filename": "Assets\\Plugins\\GitHub\\Editor\\eula.txt"
+                },
+                {
+                    "blank": 11,
+                    "code": 78,
+                    "comment": 4,
+                    "filename": "Assets\\Plugins\\GitHub\\Editor\\ExtensionLoader.cs"
+                },
+                {
+                    "filename": "Assets\\Plugins\\GitHub\\Editor\\GitHub.Api.45.dll.mdb",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "Assets\\Plugins\\GitHub\\Editor\\GitHub.Api.45.pdb",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "Assets\\Plugins\\GitHub\\Editor\\GitHub.Api.dll.mdb",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "Assets\\Plugins\\GitHub\\Editor\\GitHub.Api.pdb",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "Assets\\Plugins\\GitHub\\Editor\\GitHub.Logging.dll.mdb",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "Assets\\Plugins\\GitHub\\Editor\\GitHub.Logging.pdb",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "Assets\\Plugins\\GitHub\\Editor\\GitHub.Unity.45.dll.mdb",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "Assets\\Plugins\\GitHub\\Editor\\GitHub.Unity.45.pdb",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "Assets\\Plugins\\GitHub\\Editor\\GitHub.Unity.dll.mdb",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "Assets\\Plugins\\GitHub\\Editor\\GitHub.Unity.pdb",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "Assets\\Plugins\\GitHub\\Editor\\GitHub.UnityShim.dll.mdb",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "Assets\\Plugins\\GitHub\\Editor\\libsfw.bundle",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "Assets\\Plugins\\GitHub\\Editor\\libsfw.so",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 1,
+                    "code": 19,
+                    "comment": 0,
+                    "filename": "Assets\\Plugins\\GitHub\\Editor\\UnityAPIWrapper.cs"
+                },
+                {
+                    "blank": 4,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "Assets\\Scripts\\CameraFollow.cs"
+                },
+                {
+                    "blank": 4,
+                    "code": 51,
+                    "comment": 8,
+                    "filename": "Assets\\Scripts\\DebugPanel.cs"
+                },
+                {
+                    "blank": 4,
+                    "code": 25,
+                    "comment": 2,
+                    "filename": "Assets\\Scripts\\DebugState.cs"
+                },
+                {
+                    "blank": 11,
+                    "code": 104,
+                    "comment": 0,
+                    "filename": "Assets\\Scripts\\EventSystem\\EventManager.cs"
+                },
+                {
+                    "blank": 12,
+                    "code": 79,
+                    "comment": 0,
+                    "filename": "Assets\\Scripts\\Extensions.cs"
+                },
+                {
+                    "blank": 8,
+                    "code": 38,
+                    "comment": 26,
+                    "filename": "Assets\\Scripts\\Inventory.cs"
+                },
+                {
+                    "blank": 7,
+                    "code": 45,
+                    "comment": 23,
+                    "filename": "Assets\\Scripts\\Level Objects\\Coin.cs"
+                },
+                {
+                    "blank": 4,
+                    "code": 33,
+                    "comment": 1,
+                    "filename": "Assets\\Scripts\\Level Objects\\Goal.cs"
+                },
+                {
+                    "blank": 5,
+                    "code": 35,
+                    "comment": 4,
+                    "filename": "Assets\\Scripts\\Level Objects\\MovingPlatform.cs"
+                },
+                {
+                    "blank": 4,
+                    "code": 68,
+                    "comment": 1,
+                    "filename": "Assets\\Scripts\\Level Objects\\NormallyOff.cs"
+                },
+                {
+                    "blank": 0,
+                    "code": 60,
+                    "comment": 1,
+                    "filename": "Assets\\Scripts\\Level Objects\\NormallyOn.cs"
+                },
+                {
+                    "blank": 5,
+                    "code": 51,
+                    "comment": 2,
+                    "filename": "Assets\\Scripts\\Level Objects\\Portal.cs"
+                },
+                {
+                    "blank": 4,
+                    "code": 23,
+                    "comment": 3,
+                    "filename": "Assets\\Scripts\\Level Objects\\PortalGroup.cs"
+                },
+                {
+                    "blank": 1,
+                    "code": 15,
+                    "comment": 1,
+                    "filename": "Assets\\Scripts\\Level Objects\\Spikes.cs"
+                },
+                {
+                    "blank": 2,
+                    "code": 36,
+                    "comment": 2,
+                    "filename": "Assets\\Scripts\\Level Objects\\Spring.cs"
+                },
+                {
+                    "blank": 8,
+                    "code": 101,
+                    "comment": 1,
+                    "filename": "Assets\\Scripts\\LevelSelection.cs"
+                },
+                {
+                    "blank": 1,
+                    "code": 21,
+                    "comment": 1,
+                    "filename": "Assets\\Scripts\\MainMenuButton.cs"
+                },
+                {
+                    "blank": 90,
+                    "code": 319,
+                    "comment": 142,
+                    "filename": "Assets\\Scripts\\Platformer\\CharacterController2D.cs"
+                },
+                {
+                    "blank": 1,
+                    "code": 33,
+                    "comment": 1,
+                    "filename": "Assets\\Scripts\\Platformer\\KeyPrompt.cs"
+                },
+                {
+                    "blank": 20,
+                    "code": 109,
+                    "comment": 2,
+                    "filename": "Assets\\Scripts\\Platformer\\PlatformController.cs"
+                },
+                {
+                    "blank": 27,
+                    "code": 133,
+                    "comment": 13,
+                    "filename": "Assets\\Scripts\\Platformer\\Player.cs"
+                },
+                {
+                    "blank": 1,
+                    "code": 10,
+                    "comment": 1,
+                    "filename": "Assets\\Scripts\\QuitToDesktopButton.cs"
+                },
+                {
+                    "blank": 4,
+                    "code": 23,
+                    "comment": 2,
+                    "filename": "Assets\\Scripts\\SineWaveMovement.cs"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 1,
+                    "filename": "Assets\\Scripts\\TerminalGridBackButton.cs"
+                },
+                {
+                    "blank": 15,
+                    "code": 74,
+                    "comment": 3,
+                    "filename": "Assets\\Scripts\\Terminals\\GridInputManager.cs"
+                },
+                {
+                    "blank": 4,
+                    "code": 23,
+                    "comment": 0,
+                    "filename": "Assets\\Scripts\\Terminals\\GridPuzzle.cs"
+                },
+                {
+                    "blank": 12,
+                    "code": 165,
+                    "comment": 1,
+                    "filename": "Assets\\Scripts\\Terminals\\Point.cs"
+                },
+                {
+                    "blank": 17,
+                    "code": 122,
+                    "comment": 1,
+                    "filename": "Assets\\Scripts\\Terminals\\Shape.cs"
+                },
+                {
+                    "blank": 1,
+                    "code": 21,
+                    "comment": 0,
+                    "filename": "Assets\\Scripts\\Terminals\\ShapeData.cs"
+                },
+                {
+                    "blank": 23,
+                    "code": 155,
+                    "comment": 23,
+                    "filename": "Assets\\Scripts\\Terminals\\ShapeGameObject.cs"
+                },
+                {
+                    "blank": 10,
+                    "code": 127,
+                    "comment": 5,
+                    "filename": "Assets\\Scripts\\Terminals\\Terminal.cs"
+                },
+                {
+                    "blank": 2,
+                    "code": 45,
+                    "comment": 1,
+                    "filename": "Assets\\Scripts\\Terminals\\TerminalConnection.cs"
+                },
+                {
+                    "blank": 37,
+                    "code": 374,
+                    "comment": 12,
+                    "filename": "Assets\\Scripts\\Terminals\\TerminalGrid.cs"
+                },
+                {
+                    "blank": 3,
+                    "code": 13,
+                    "comment": 2,
+                    "filename": "Assets\\Scripts\\Test.cs"
+                },
+                {
+                    "blank": 25,
+                    "code": 199,
+                    "comment": 1,
+                    "filename": "Assets\\Scripts\\Util.cs"
+                },
+                {
+                    "blank": 4,
+                    "code": 32,
+                    "comment": 2,
+                    "filename": "Assets\\Scripts\\WorldLayoutGroup.cs"
+                },
+                {
+                    "filename": "Assets\\Sprites\\Button Graphics\\Others\\Preview.fla",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 13,
+                    "code": 72,
+                    "comment": 0,
+                    "filename": "Assets\\Sprites\\Button Graphics\\Readme.txt"
+                },
+                {
+                    "filename": "Assets\\Sprites\\Button Graphics\\Vector Source.fla",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "Assets\\Sprites\\Puzzles\\Box.PNG",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "Assets\\Sprites\\Puzzles\\Key.PNG",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "Assets\\Sprites\\slope42.png_original",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "Assets\\Sprites\\slope52.png_original",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "Assets\\Sprites\\tile22.png_original",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "Assets\\Sprites\\tile32.png_original",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "Assets\\Sprites\\tile32groundcorner.png_original",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "Assets\\Sprites\\tile42.png_original",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "Assets\\Sprites\\tile622.png_original",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 0,
+                    "code": 10,
+                    "comment": 0,
+                    "filename": "Assets\\Standard Assets\\2D\\PhysicsMaterials\\BouncyBox.physicsMaterial2D"
+                },
+                {
+                    "blank": 0,
+                    "code": 10,
+                    "comment": 0,
+                    "filename": "Assets\\Standard Assets\\2D\\PhysicsMaterials\\Slippery.physicsMaterial2D"
+                },
+                {
+                    "blank": 0,
+                    "code": 10,
+                    "comment": 0,
+                    "filename": "Assets\\Standard Assets\\2D\\PhysicsMaterials\\Sticky.physicsMaterial2D"
+                },
+                {
+                    "blank": 5,
+                    "code": 173,
+                    "comment": 0,
+                    "filename": "GridHelper.html"
+                },
+                {
+                    "blank": 3,
+                    "code": 10,
+                    "comment": 0,
+                    "filename": "Logs\\Packages-Update.log"
+                },
+                {
+                    "blank": 0,
+                    "code": 35,
+                    "comment": 0,
+                    "filename": "New Unity Project 2.sln"
+                },
+                {
+                    "blank": 0,
+                    "code": 40,
+                    "comment": 0,
+                    "filename": "Packages\\manifest.json"
+                },
+                {
+                    "filename": "Python\\__pycache__\\Board.cpython-37.pyc",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "Python\\__pycache__\\PuzzlesAndShapes.cpython-37.pyc",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "Python\\__pycache__\\Shape.cpython-37.pyc",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 6,
+                    "code": 46,
+                    "comment": 3,
+                    "filename": "Python\\Board.py"
+                },
+                {
+                    "filename": "Python\\Board.pyc",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 15,
+                    "code": 79,
+                    "comment": 3,
+                    "filename": "Python\\generatepuzzles.py"
+                },
+                {
+                    "blank": 7,
+                    "code": 8,
+                    "comment": 0,
+                    "filename": "Python\\PuzzlesAndShapes.py"
+                },
+                {
+                    "blank": 11,
+                    "code": 38,
+                    "comment": 0,
+                    "filename": "Python\\Shape.py"
+                },
+                {
+                    "blank": 5,
+                    "code": 26,
+                    "comment": 0,
+                    "filename": "Python\\test.py"
+                }
+            ]
+        }
+    ]
+}

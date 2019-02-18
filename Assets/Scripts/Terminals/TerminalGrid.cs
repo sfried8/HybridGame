@@ -30,6 +30,11 @@ public class TerminalGrid : MonoBehaviour
 	private bool wasIncomplete = true;
 
 	public Vector3 clickedVoxel;
+
+	private float panelLeft;
+	private float panelWidth;
+	private float panelTop;
+	private float panelHeight;
 	public void OnActivated ()
 	{
 		isActive = true;
@@ -41,6 +46,15 @@ public class TerminalGrid : MonoBehaviour
 			}
 		}
 		RefreshGrid ();
+		Vector3[] corners = new Vector3[4];
+		panel.GetWorldCorners (corners);
+		Vector3 bottomLeft = Camera.allCameras[1].WorldToScreenPoint (corners[0]);
+		Vector3 topRight = Camera.allCameras[1].WorldToScreenPoint (corners[2]);
+		panelLeft = bottomLeft.x;
+		panelWidth = topRight.x - panelLeft;
+		panelTop = topRight.y;
+		panelHeight = bottomLeft.y - panelTop;
+
 	}
 	public void OnDeactivated ()
 	{
@@ -79,11 +93,11 @@ public class TerminalGrid : MonoBehaviour
 				EventTrigger eventTrigger = buttonGameObject.GetComponent<EventTrigger> ();
 				EventTrigger.Entry eventEntry = new EventTrigger.Entry ();
 				eventEntry.eventID = EventTriggerType.PointerEnter;
-				eventEntry.callback.AddListener ((data) => ButtonHover (newRow, newCol));
+				// eventEntry.callback.AddListener ((data) => ButtonHover (newRow, newCol));
 				eventTrigger.triggers.Add (eventEntry);
 				EventTrigger.Entry eventExit = new EventTrigger.Entry ();
 				eventExit.eventID = EventTriggerType.PointerExit;
-				eventExit.callback.AddListener ((data) => ButtonHoverExit ());
+				// eventExit.callback.AddListener ((data) => ButtonHoverExit ());
 				eventTrigger.triggers.Add (eventExit);
 				buttons[row, col] = buttonGameObject;
 				buttonGameObject.SetActive (false);
@@ -95,6 +109,8 @@ public class TerminalGrid : MonoBehaviour
 		}
 
 		RefreshGrid ();
+		hoverState = this.CreateStateObject (2, KeyCode.U);
+		currentHover = null;
 	}
 	void ButtonHover (int row, int col)
 	{
@@ -113,6 +129,7 @@ public class TerminalGrid : MonoBehaviour
 		currentShape?.ClearColorVoxels ();
 		RefreshGrid ();
 	}
+	private DebugState hoverState;
 	public void RefreshGrid ()
 	{
 		if (!isActive)
@@ -177,7 +194,8 @@ public class TerminalGrid : MonoBehaviour
 						int hsy = height - i - 1;
 						int hsx = width - j - 1;
 
-						hoverSection[hsy, hsx] = grid[i + currentHover.Row - currentShape.CenterPoint.Y + currentShape.OffsetPoint.Y, j + currentHover.Col - currentShape.CenterPoint.X + currentShape.OffsetPoint.X];
+						hoverSection[hsy, hsx] = grid[i + currentHover.Row - currentShape.OffsetPoint.Y, j + currentHover.Col - currentShape.OffsetPoint.X];
+
 					}
 				}
 			}
@@ -333,41 +351,53 @@ public class TerminalGrid : MonoBehaviour
 				}
 			}
 	}
-	public void CyclePuzzle ()
-	{
-		puzzleIndex = (puzzleIndex + 1) % puzzles.Count;
-		grid = puzzles[puzzleIndex].Grid;
-		slots.Clear ();
-		for (int row = 0; row < rowCount; row++)
-		{
-			for (int col = 0; col < colCount; col++)
-			{
 
-				if (grid[row, col] == 1)
-				{
-					slots.Add (Point.GridCoord (row, col));
-				}
-			}
-		}
-		RefreshGrid ();
-		CheckIsComplete ();
-	}
 	// Update is called once per frame
 	static bool mouseActive = true;
 
+	void calculateButtonHoverFromMousePosition (bool isOddX, bool isOddY)
+	{
+		Vector3 pos = Input.mousePosition;
+		Vector3 relativeMousePosition = mousePositionToButtonPosition (pos, isOddX, isOddY);
+		if (relativeMousePosition.x < 0 || relativeMousePosition.x > 8 || relativeMousePosition.y < 0 || relativeMousePosition.y > 8)
+		{
+			if (currentHover != null)
+			{
+				ButtonHoverExit ();
+			}
+		}
+		else
+		{
+			int row = (int) relativeMousePosition.y;
+			int col = (int) relativeMousePosition.x;
+			if (currentHover == null || currentHover.Row != row || currentHover.Col != col)
+			{
+				ButtonHover (row, col);
+			}
+		}
+	}
+	private Vector3 mousePositionToButtonPosition (Vector3 mousePosition, bool isOddX, bool isOddY)
+	{
+		float xPercent = ((mousePosition.x - panelLeft + (isOddX ? 22.5f : 0)) / panelWidth);
+		float yPercent = ((mousePosition.y - panelTop + (isOddY ? 22.5f : 0)) / panelHeight);
+		return new Vector3 (xPercent * 8.0f, yPercent * 8.0f, 0);
+	}
 	void Update ()
 	{
-		if (Input.GetKeyDown (KeyCode.H))
+		if (isActive)
 		{
-			mouseActive = !mouseActive;
-		}
-		if (isActive && mouseActive && currentShape != null && !Input.GetMouseButton (1))
-		{
-			Vector3 pos = Input.mousePosition;
-			pos.z = 10; //currentShape.gameObject.transform.position.z - Camera.allCameras[1].transform.position.z;
-			currentShape.DragToPosition (Camera.allCameras[1].ScreenToWorldPoint (pos)) /* + Camera.allCameras[1].ScreenToWorldPoint (clickedVoxel)*/ ;
+			calculateButtonHoverFromMousePosition (currentShape?.isOddX??false, currentShape?.isOddY??false);
 
-			// currentShape.targetPosition = currentShape.gameObject.transform.localPosition;
+			if (mouseActive && currentShape != null && !Input.GetMouseButton (1))
+			{
+				Vector3 pos = Input.mousePosition;
+				// Debug.Log (mousePositionToButtonPosition (pos));
+
+				pos.z = 10; //currentShape.gameObject.transform.position.z - Camera.allCameras[1].transform.position.z;
+				currentShape.DragToPosition (Camera.allCameras[1].ScreenToWorldPoint (pos)) /* + Camera.allCameras[1].ScreenToWorldPoint (clickedVoxel)*/ ;
+
+				// currentShape.targetPosition = currentShape.gameObject.transform.localPosition;
+			}
 		}
 
 	}

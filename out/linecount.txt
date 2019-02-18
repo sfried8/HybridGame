@@ -1,0 +1,101 @@
+===============================================================================
+EXTENSION NAME : linecount
+EXTENSION VERSION : 0.1.7
+-------------------------------------------------------------------------------
+count time : 2019-02-17 22:58:06
+count workspace : d:\Documents\New Unity Project 2
+total files : 89
+total code lines : 5836
+total comment lines : 312
+total blank lines : 519
+
+.gitattributes, code is 60, comment is 0, blank is 7.
+Assembly-CSharp-Editor-firstpass.csproj, code is 711, comment is 0, blank is 1.
+Assembly-CSharp-Editor.csproj, code is 715, comment is 0, blank is 1.
+Assembly-CSharp.csproj, code is 688, comment is 0, blank is 1.
+Assets\Editor\PlatformerControllerEditor.cs, code is 14, comment is 1, blank is 4.
+Assets\Editor\WorldLayoutGroupEditor.cs, code is 13, comment is 0, blank is 3.
+Assets\Fonts\Intro.otf, it is a binary file.
+Assets\Materials\Blur.shader, code is 165, comment is 12, blank is 33.
+Assets\Plugins\GitHub\Editor\credits.txt, code is 2, comment is 0, blank is 0.
+Assets\Plugins\GitHub\Editor\eula.txt, code is 24, comment is 0, blank is 10.
+Assets\Plugins\GitHub\Editor\ExtensionLoader.cs, code is 78, comment is 4, blank is 11.
+Assets\Plugins\GitHub\Editor\GitHub.Api.45.dll.mdb, it is a binary file.
+Assets\Plugins\GitHub\Editor\GitHub.Api.45.pdb, it is a binary file.
+Assets\Plugins\GitHub\Editor\GitHub.Api.dll.mdb, it is a binary file.
+Assets\Plugins\GitHub\Editor\GitHub.Api.pdb, it is a binary file.
+Assets\Plugins\GitHub\Editor\GitHub.Logging.dll.mdb, it is a binary file.
+Assets\Plugins\GitHub\Editor\GitHub.Logging.pdb, it is a binary file.
+Assets\Plugins\GitHub\Editor\GitHub.Unity.45.dll.mdb, it is a binary file.
+Assets\Plugins\GitHub\Editor\GitHub.Unity.45.pdb, it is a binary file.
+Assets\Plugins\GitHub\Editor\GitHub.Unity.dll.mdb, it is a binary file.
+Assets\Plugins\GitHub\Editor\GitHub.Unity.pdb, it is a binary file.
+Assets\Plugins\GitHub\Editor\GitHub.UnityShim.dll.mdb, it is a binary file.
+Assets\Plugins\GitHub\Editor\libsfw.bundle, it is a binary file.
+Assets\Plugins\GitHub\Editor\libsfw.so, it is a binary file.
+Assets\Plugins\GitHub\Editor\UnityAPIWrapper.cs, code is 19, comment is 0, blank is 1.
+Assets\Scripts\CameraFollow.cs, code is 14, comment is 0, blank is 4.
+Assets\Scripts\DebugPanel.cs, code is 51, comment is 8, blank is 4.
+Assets\Scripts\DebugState.cs, code is 25, comment is 2, blank is 4.
+Assets\Scripts\EventSystem\EventManager.cs, code is 104, comment is 0, blank is 11.
+Assets\Scripts\Extensions.cs, code is 79, comment is 0, blank is 12.
+Assets\Scripts\Inventory.cs, code is 38, comment is 26, blank is 8.
+Assets\Scripts\Level Objects\Coin.cs, code is 45, comment is 23, blank is 7.
+Assets\Scripts\Level Objects\Goal.cs, code is 33, comment is 1, blank is 4.
+Assets\Scripts\Level Objects\MovingPlatform.cs, code is 35, comment is 4, blank is 5.
+Assets\Scripts\Level Objects\NormallyOff.cs, code is 68, comment is 1, blank is 4.
+Assets\Scripts\Level Objects\NormallyOn.cs, code is 60, comment is 1, blank is 0.
+Assets\Scripts\Level Objects\Portal.cs, code is 51, comment is 2, blank is 5.
+Assets\Scripts\Level Objects\PortalGroup.cs, code is 23, comment is 3, blank is 4.
+Assets\Scripts\Level Objects\Spikes.cs, code is 15, comment is 1, blank is 1.
+Assets\Scripts\Level Objects\Spring.cs, code is 36, comment is 2, blank is 2.
+Assets\Scripts\LevelSelection.cs, code is 101, comment is 1, blank is 8.
+Assets\Scripts\MainMenuButton.cs, code is 21, comment is 1, blank is 1.
+Assets\Scripts\Platformer\CharacterController2D.cs, code is 319, comment is 142, blank is 90.
+Assets\Scripts\Platformer\KeyPrompt.cs, code is 33, comment is 1, blank is 1.
+Assets\Scripts\Platformer\PlatformController.cs, code is 109, comment is 2, blank is 20.
+Assets\Scripts\Platformer\Player.cs, code is 133, comment is 13, blank is 27.
+Assets\Scripts\QuitToDesktopButton.cs, code is 10, comment is 1, blank is 1.
+Assets\Scripts\SineWaveMovement.cs, code is 23, comment is 2, blank is 4.
+Assets\Scripts\TerminalGridBackButton.cs, code is 14, comment is 1, blank is 2.
+Assets\Scripts\Terminals\GridInputManager.cs, code is 74, comment is 3, blank is 15.
+Assets\Scripts\Terminals\GridPuzzle.cs, code is 23, comment is 0, blank is 4.
+Assets\Scripts\Terminals\Point.cs, code is 165, comment is 1, blank is 12.
+Assets\Scripts\Terminals\Shape.cs, code is 122, comment is 1, blank is 17.
+Assets\Scripts\Terminals\ShapeData.cs, code is 21, comment is 0, blank is 1.
+Assets\Scripts\Terminals\ShapeGameObject.cs, code is 155, comment is 23, blank is 23.
+Assets\Scripts\Terminals\Terminal.cs, code is 127, comment is 5, blank is 10.
+Assets\Scripts\Terminals\TerminalConnection.cs, code is 45, comment is 1, blank is 2.
+Assets\Scripts\Terminals\TerminalGrid.cs, code is 374, comment is 12, blank is 37.
+Assets\Scripts\Test.cs, code is 13, comment is 2, blank is 3.
+Assets\Scripts\Util.cs, code is 199, comment is 1, blank is 25.
+Assets\Scripts\WorldLayoutGroup.cs, code is 32, comment is 2, blank is 4.
+Assets\Sprites\Button Graphics\Others\Preview.fla, it is a binary file.
+Assets\Sprites\Button Graphics\Readme.txt, code is 72, comment is 0, blank is 13.
+Assets\Sprites\Button Graphics\Vector Source.fla, it is a binary file.
+Assets\Sprites\Puzzles\Box.PNG, it is a binary file.
+Assets\Sprites\Puzzles\Key.PNG, it is a binary file.
+Assets\Sprites\slope42.png_original, it is a binary file.
+Assets\Sprites\slope52.png_original, it is a binary file.
+Assets\Sprites\tile22.png_original, it is a binary file.
+Assets\Sprites\tile32.png_original, it is a binary file.
+Assets\Sprites\tile32groundcorner.png_original, it is a binary file.
+Assets\Sprites\tile42.png_original, it is a binary file.
+Assets\Sprites\tile622.png_original, it is a binary file.
+Assets\Standard Assets\2D\PhysicsMaterials\BouncyBox.physicsMaterial2D, code is 10, comment is 0, blank is 0.
+Assets\Standard Assets\2D\PhysicsMaterials\Slippery.physicsMaterial2D, code is 10, comment is 0, blank is 0.
+Assets\Standard Assets\2D\PhysicsMaterials\Sticky.physicsMaterial2D, code is 10, comment is 0, blank is 0.
+GridHelper.html, code is 173, comment is 0, blank is 5.
+Logs\Packages-Update.log, code is 10, comment is 0, blank is 3.
+New Unity Project 2.sln, code is 35, comment is 0, blank is 0.
+Packages\manifest.json, code is 40, comment is 0, blank is 0.
+Python\__pycache__\Board.cpython-37.pyc, it is a binary file.
+Python\__pycache__\PuzzlesAndShapes.cpython-37.pyc, it is a binary file.
+Python\__pycache__\Shape.cpython-37.pyc, it is a binary file.
+Python\Board.py, code is 46, comment is 3, blank is 6.
+Python\Board.pyc, it is a binary file.
+Python\generatepuzzles.py, code is 79, comment is 3, blank is 15.
+Python\PuzzlesAndShapes.py, code is 8, comment is 0, blank is 7.
+Python\Shape.py, code is 38, comment is 0, blank is 11.
+Python\test.py, code is 26, comment is 0, blank is 5.
+===============================================================================
