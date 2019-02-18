@@ -329,7 +329,7 @@ public class TerminalGrid : MonoBehaviour
 		currentShape = shape;
 		currentShape.FreezePosition = true;
 		currentShape.gameObject.transform.localScale = new Vector3 (1.0f, 1.0f, 1.0f);
-		DebugPanel.StartChecking ("currentHover", () => currentHover.ToString ());
+		// DebugPanel.StartChecking ("currentHover", () => currentHover.ToString ());
 	}
 	public void GetClickTarget ()
 	{

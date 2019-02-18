@@ -74,6 +74,21 @@ public class ShapeGameObject : MonoBehaviour
     }
     public Quaternion quaternion;
 
+    private void UpdateDimensionOffsets ()
+    {
+        Vector3 geometricCenter = Util.GeometricCenter (shape.Face ());
+        shape.isOddX = (geometricCenter.x - Math.Truncate (geometricCenter.x) >= 0.4f);
+        shape.isOddY = (geometricCenter.y - Math.Truncate (geometricCenter.y) >= 0.4f);
+
+        shape.OffsetPoint = geometricCenter.ToPoint ();
+        Debug.Log (geometricCenter);
+        Debug.Log (shape.OffsetPoint.ToVector3 ());
+
+        // float x = 1.1f * shape.OffsetPoint.X;
+        // float y = -1.1f * shape.OffsetPoint.Y;
+
+        targetOffsetPosition = Vector3.Scale (new Vector3 (1.0f, -1.0f, 0), shape.CenterPoint.ToVector3 () - geometricCenter);
+    }
     public void rotate (Util.ROTATE_DIRECTION dir, bool reverse)
     {
         Voxels = Util.RotateArray (Voxels, dir, reverse); //Util.CreateNulled3DGameObjectArray (Voxels); //, Voxels[0].Length, Voxels[0,0].Length];
@@ -89,25 +104,8 @@ public class ShapeGameObject : MonoBehaviour
         {
             quaternion = Quaternion.AngleAxis (reverse ? -90 : 90, Vector3.right) * quaternion;
         }
-        // if (dir != Util.ROTATE_DIRECTION.ROLL)
-        // {
 
-        // int w = (shape.FaceWidth () - 1) / 2;
-        // int h = (shape.FaceHeight () - 1) / 2;
-        // shape.OffsetPoint = new Point (shape.CenterPoint.X - (w + shape.FaceLeftMargin ()), (shape.CenterPoint.Y - (h + shape.FaceTopMargin ())));
-        Vector3 geometricCenter = Util.GeometricCenter (shape.Face ());
-        shape.isOddX = (geometricCenter.x - Math.Truncate (geometricCenter.x) >= 0.4f);
-        shape.isOddY = (geometricCenter.y - Math.Truncate (geometricCenter.y) >= 0.4f);
-
-        shape.OffsetPoint = geometricCenter.ToPoint ();
-        Debug.Log (geometricCenter);
-        Debug.Log (shape.OffsetPoint.ToVector3 ());
-
-        // float x = 1.1f * shape.OffsetPoint.X;
-        // float y = -1.1f * shape.OffsetPoint.Y;
-
-        targetOffsetPosition = Vector3.Scale (new Vector3 (1.0f, -1.0f, 0), shape.CenterPoint.ToVector3 () - geometricCenter);
-
+        UpdateDimensionOffsets ();
     }
 
     public void Regenerate ()
@@ -117,7 +115,7 @@ public class ShapeGameObject : MonoBehaviour
         {
             DestroyImmediate (transform.GetChild (0).gameObject);
         }
-        Vector3 geometricCenter = Util.GeometricCenter (shape.Face ());
+        UpdateDimensionOffsets ();
         Voxels = new GameObject[shape.grid.GetLength (0), shape.grid.GetLength (1), shape.grid.GetLength (2)]; //, shape.grid.GetLength(1), shape.grid.GetLength(2)];
         for (int plane = 0; plane < shape.grid.GetLength (0); plane++)
         {
