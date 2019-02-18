@@ -91,9 +91,9 @@ public class Point : IEquatable<Point>
 	{
 		return new Point (1, 1, 1);
 	}
-	public static Point FromVector3 (Vector3 source)
+	public Vector3 toVector3 ()
 	{
-		return new Point ((int) source.x, (int) source.y, (int) source.z);
+		return new Vector3 (x, y, z);
 	}
 	public Point (int x, int y, int z)
 	{

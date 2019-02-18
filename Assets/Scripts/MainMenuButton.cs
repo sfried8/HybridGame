@@ -15,7 +15,6 @@ public class MainMenuButton : MonoBehaviour
             GetComponent<Button> ().interactable = false;
             GetComponentInChildren<Text> ().color = Color.gray;
         }
-        Debug.Log ("hello?!");
     }
     public void OnClick ()
     {

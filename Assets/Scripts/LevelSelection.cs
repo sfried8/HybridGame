@@ -86,7 +86,6 @@ public class LevelSelection : MonoBehaviour
     }
     public static void OnClick (int level)
     {
-        Debug.Log ("hello?");
         if (!IsLevelUnlocked (level))
         {
             return;

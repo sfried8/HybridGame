@@ -7,9 +7,20 @@ using UnityEngine;
 public static class Extensions
 {
 
+	public static DebugState CreateStateObject (this MonoBehaviour mb, int numStates, KeyCode keyCode)
+	{
+		DebugState ds = mb.gameObject.AddComponent<DebugState> ();
+		ds.numStates = numStates;
+		ds.toggleKey = keyCode;
+		return ds;
+	}
 	public static void SetTimeout (this MonoBehaviour mb, Util.VoidFunction action, float seconds)
 	{
 		mb.StartCoroutine (Util.setTimeoutHelper (action, seconds));
+	}
+	public static Point ToPoint (this Vector3 vector)
+	{
+		return new Point ((int) vector.x, (int) vector.y, (int) vector.z);
 	}
 	public static string PrettyPrint (this int[, ] grid)
 	{

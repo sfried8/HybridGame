@@ -310,7 +310,7 @@ public class TerminalGrid : MonoBehaviour
 	{
 		currentShape = shape;
 		currentShape.FreezePosition = true;
-		currentShape.gameObject.transform.localScale = new Vector3 (1.1f, 1.1f, 1.1f);
+		currentShape.gameObject.transform.localScale = new Vector3 (1.0f, 1.0f, 1.0f);
 	}
 	public void GetClickTarget ()
 	{
@@ -353,12 +353,18 @@ public class TerminalGrid : MonoBehaviour
 		CheckIsComplete ();
 	}
 	// Update is called once per frame
+	static bool mouseActive = true;
+
 	void Update ()
 	{
-		if (isActive && currentShape != null && !Input.GetMouseButton (1))
+		if (Input.GetKeyDown (KeyCode.H))
+		{
+			mouseActive = !mouseActive;
+		}
+		if (isActive && mouseActive && currentShape != null && !Input.GetMouseButton (1))
 		{
 			Vector3 pos = Input.mousePosition;
-			pos.z = currentShape.gameObject.transform.position.z - Camera.allCameras[1].transform.position.z;
+			pos.z = 10; //currentShape.gameObject.transform.position.z - Camera.allCameras[1].transform.position.z;
 			currentShape.DragToPosition (Camera.allCameras[1].ScreenToWorldPoint (pos)) /* + Camera.allCameras[1].ScreenToWorldPoint (clickedVoxel)*/ ;
 
 			// currentShape.targetPosition = currentShape.gameObject.transform.localPosition;

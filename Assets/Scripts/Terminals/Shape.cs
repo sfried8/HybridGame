@@ -126,18 +126,6 @@ public class Shape : MonoBehaviour
         CenterPoint = new Point ((width - 1) / 2, (height - 1) / 2, (depth - 1) / 2);
         shapeGameObject.Regenerate ();
     }
-
-    [ContextMenu ("Test")]
-    public void Test ()
-    {
-        int[, ] blah = new int[, ]
-        { { 0, 0, 0, 0, 0 }, { 0, 0, 1, 0, 0 }, { 0, 0, 1, 1, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }
-        };
-        Debug.Log (blah.PrettyPrint ());
-        Debug.Log ("----");
-        Debug.Log (Util.TrimArray (blah).PrettyPrint ());
-
-    }
     public void DragToPosition (Vector3 point)
     {
         shapeGameObject.DragToPosition (point);
