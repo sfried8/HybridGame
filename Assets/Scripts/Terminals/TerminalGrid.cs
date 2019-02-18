@@ -329,6 +329,7 @@ public class TerminalGrid : MonoBehaviour
 		currentShape = shape;
 		currentShape.FreezePosition = true;
 		currentShape.gameObject.transform.localScale = new Vector3 (1.0f, 1.0f, 1.0f);
+		DebugPanel.StartChecking ("currentHover", () => currentHover.ToString ());
 	}
 	public void GetClickTarget ()
 	{
@@ -378,7 +379,7 @@ public class TerminalGrid : MonoBehaviour
 	}
 	private Vector3 mousePositionToButtonPosition (Vector3 mousePosition, bool isOddX, bool isOddY)
 	{
-		float xPercent = ((mousePosition.x - panelLeft + (isOddX ? 22.5f : 0)) / panelWidth);
+		float xPercent = ((mousePosition.x - panelLeft + (isOddX ? -22.5f : 0)) / panelWidth);
 		float yPercent = ((mousePosition.y - panelTop + (isOddY ? 22.5f : 0)) / panelHeight);
 		return new Vector3 (xPercent * 8.0f, yPercent * 8.0f, 0);
 	}

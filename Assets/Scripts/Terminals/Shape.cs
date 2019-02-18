@@ -72,6 +72,7 @@ public class Shape : MonoBehaviour
     public bool isOddY;
     public List<Point> GetTileLocations (Point _location)
     {
+
         int[, ] face = Face ();
         List<Point> ret = new List<Point> ();
         for (int row = 0; row < face.GetLength (0); row++)

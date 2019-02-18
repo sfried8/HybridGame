@@ -79,6 +79,10 @@ public class Point : IEquatable<Point>
 			z = value;
 		}
 	}
+	public override string ToString ()
+	{
+		return string.Format ("<{0},{1},{2}>", x, y, z);
+	}
 	public static Point GridCoord (int row, int col)
 	{
 		return new Point (col, row);

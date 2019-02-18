@@ -9,7 +9,7 @@ public class DebugPanel : MonoBehaviour
     private Text textField;
     public delegate string StringFunction ();
     public Dictionary<string, StringFunction> debugFuncs;
-    void Start ()
+    void Awake ()
     {
         debugFuncs = new Dictionary<string, StringFunction> ();
         textField = GetComponentInChildren<Text> ();
@@ -18,13 +18,13 @@ public class DebugPanel : MonoBehaviour
     // Update is called once per frame
     void Update ()
     {
-        // string result = "";
-        // foreach (string key in debugFuncs.Keys)
-        // {
-        //     result += key + ": " + debugFuncs[key] () + "\n";
-        // }
+        string result = "";
+        foreach (string key in debugFuncs.Keys)
+        {
+            result += key + ": " + debugFuncs[key] () + "\n";
+        }
 
-        // textField.text = result;
+        textField.text = result;
 
     }
     private static DebugPanel _instance;
@@ -41,7 +41,7 @@ public class DebugPanel : MonoBehaviour
     }
     public static void StartChecking (string name, StringFunction value)
     {
-        if (!_instance)
+        if (!instance)
         {
             return;
         }
@@ -54,7 +54,7 @@ public class DebugPanel : MonoBehaviour
     }
     public static void StopChecking (string name)
     {
-        if (!_instance)
+        if (!instance)
         {
             return;
         }
