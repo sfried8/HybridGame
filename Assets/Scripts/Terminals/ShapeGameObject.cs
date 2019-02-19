@@ -127,22 +127,12 @@ public class ShapeGameObject : MonoBehaviour
                         Voxels[plane, row, col] = voxel;
                         voxel.name = string.Format ("{0},{1},{2}", plane, row, col);
                     }
-                    // else
-                    // {
-                    //     GameObject voxel = (GameObject) Instantiate (voxelPrefab);
-                    //     voxel.transform.SetParent (gameObject.transform);
-                    //     voxel.transform.localPosition = new Vector3 (col - (shape.width - 1) / 2.0f, (shape.height - 1) / 2.0f - row, plane - (shape.depth - 1) / 2.0f);
-                    //     voxel.transform.localScale = new Vector3 (0.25f, 0.25f, 0.25f);
-                    //     voxel.name = string.Format ("{0},{1},{2}", plane, row, col);
-                    //     voxel.GetComponent<Renderer> ().materials = new Material[1] { materialGreen };
-                    //     voxel.GetComponent<Renderer> ().material.color = new Color (1f, 1f, 1f, 1f / 255f);
-                    // }
+
                 }
             }
         }
         quaternion = Quaternion.identity;
         targetPosition = transform.localPosition;
-        targetOffsetPosition = Vector3.zero;
 
     }
 
@@ -172,15 +162,6 @@ public class ShapeGameObject : MonoBehaviour
             transform.parent.localPosition = Vector3.Lerp (transform.parent.localPosition, targetPosition, Time.deltaTime * smooth * 5);
         }
         transform.localPosition = Vector3.Lerp (transform.localPosition, targetOffsetPosition, Time.deltaTime * smooth);
-        // if (centerPoint != null && centerPoint.activeSelf)
-        // {
-        //     centerPoint.transform.localPosition = Vector3.Scale (targetOffsetPosition, new Vector3 (-1, -1, -1));
-
-        // }
-        if (Input.GetKeyDown (KeyCode.G))
-        {
-            targetOffsetPosition = Vector3.zero;
-        }
 
     }
 
